@@ -1,0 +1,34 @@
+parameters:
+  git_dir: .
+  bin_dir: ./vendor/bin
+  tasks:
+    jsonlint: ~
+    phpcsfixer2:
+      config: "./.php_cs"
+      allow_risky: true
+      # rules:
+      #   - "@@Symfony"
+      #   - "@@Symfony:risky"
+      #   - array_syntax
+      #   - combine_consecutive_unsets
+      #   - no_extra_consecutive_blank_lines
+      #   - no_useless_else
+      #   - no_useless_return
+      #   - ordered_class_elements
+      #   - ordered_imports
+      #   - php_unit_strict
+      #   - psr4
+      #   - strict_comparison
+      #   - strict_param
+      using_cache: false
+      config_contains_finder: false
+    phplint: ~
+    phpmd:
+      ruleset: ['unusedcode', 'codesize']
+    phpparser: ~
+    phpspec: ~
+    shell: ~
+    xmllint: ~
+    yamllint:
+      parse_custom_tags: true
+    xdebugparse: ~
