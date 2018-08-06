@@ -1,0 +1,21 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+    public: true
+
+  TelNowEdge\Module\tnetc\Controller\PageController:
+    parent: TelNowEdge\FreePBX\Base\Controller\AbstractController
+    autowire: true
+    autoconfigure: false
+    public: true
+    tags:
+      - "telnowedge.controller"
+
+  TelNowEdge\Module\tnetc\Controller\AjaxController:
+    parent: TelNowEdge\FreePBX\Base\Controller\AbstractController
+    autowire: true
+    autoconfigure: false
+    public: true
+    tags:
+      - "telnowedge.controller"

@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+    public: true
+
+  TelNowEdge\Module\tnetc\Resources\Migrations\TimeConditionMigration:
+    parent: TelNowEdge\FreePBX\Base\Resources\Migrations\AbstractSqlMigration
+    autowire: true
+    autoconfigure: false
+    public: true

@@ -1,0 +1,69 @@
+<div id="toolbar-all">
+  <a href="config.php?display=fagi" class="btn btn-primary"><i class="fa fa-list"></i> {{ 'Lists' | fpbxtrans }}</a>
+  <a href="config.php?display=fagi&amp;action=add" class="btn btn-primary"><i class="fa fa-plus"></i> {{ 'Add' | fpbxtrans }}</a>
+</div>
+
+<table
+  data-url="ajax.php?module=modfagi&amp;command=getFagiGrid&amp;type=all"
+  data-cache="false"
+  data-show-refresh="false"
+  data-toolbar="#toolbar-all"
+  data-cookie="true"
+  data-cookie-id-table="fagi-table"
+  data-maintain-selected="true"
+  data-show-columns="false"
+  data-show-toggle="false"
+  data-toggle="table"
+  data-pagination="false"
+  data-search="true"
+  class="bootstrap-table table table-striped ext-list"
+  id="table-fagi"
+>
+  <thead>
+    <tr>
+      <th class="hidden id" data-field="id"></th>
+      <th class="display-name" data-sortable="true" data-field="displayName">{{ 'Display name' | fpbxtrans }}</th>
+      <th data-sortable="true" data-field="description">{{ 'Description' | fpbxtrans }}</th>
+    </tr>
+  </thead>
+</table>
+
+<script type="text/javascript">
+ $('#table-fagi').on('load-success.bs.table', function () {
+   const datas = $(this).bootstrapTable('getData');
+
+   wrapLink(datas);
+ });
+
+ $('#table-fagi').on('search.bs.table', function () {
+   const datas = $(this).bootstrapTable('getData');
+
+   wrapLink(datas);
+ });
+
+ $('#table-fagi').on('sort.bs.table', function () {
+   const datas = $(this).bootstrapTable('getData');
+
+   setTimeout(function () {
+     wrapLink(datas);
+   });
+ });
+
+ function wrapLink(datas) {
+   datas.forEach(function (x) {
+     $('table td.id').each(function () {
+       if ($(this).text() === x.id) {
+         var a  = $(this)
+           .parent()
+           .find('td.display-name')
+           .wrapInner(
+             $('<a />', {
+               href: "config.php?display=fagi&id=" + x.id
+             })
+           )
+         ;
+       }
+     });
+   });
+ }
+</script>

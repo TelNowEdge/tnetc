@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+    public: true
+
+  TelNowEdge\Module\tnetc\Repository\TimeConditionRepository:
+    parent: TelNowEdge\FreePBX\Base\Repository\AbstractRepository
+    autowire: true
+    autoconfigure: false
+    public: true
