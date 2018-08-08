@@ -81,12 +81,8 @@ class TimeConditionBlock
         $this->timeConditionBlockTgs = new \Doctrine\Common\Collections\ArrayCollection(array(
             new TimeConditionBlockTg(true),
         ));
-        $this->timeConditionBlockCalendars = new \Doctrine\Common\Collections\ArrayCollection(array(
-            new TimeConditionBlockCalendar(true),
-        ));
-        $this->timeConditionBlockHints = new \Doctrine\Common\Collections\ArrayCollection(array(
-            new TimeConditionBlockHint(true),
-        ));
+        $this->timeConditionBlockCalendars = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->timeConditionBlockHints = new \Doctrine\Common\Collections\ArrayCollection();
 
         if (true === $child) {
             return;
