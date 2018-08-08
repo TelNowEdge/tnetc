@@ -33,5 +33,6 @@ class TnetcExtension extends Extension
         $loader->load('controllers.yml');
         $loader->load('migrations.yml');
         $loader->load('repositories.yml');
+        $loader->load('handlers.yml');
     }
 }

@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+    public: true
+
+  TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionDbHandler:
+    parent: TelNowEdge\FreePBX\Base\Handler\AbstractDbHandler
+    autowire: true
+    autoconfigure: false
+    public: true

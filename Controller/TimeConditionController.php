@@ -20,6 +20,7 @@ namespace TelNowEdge\Module\tnetc\Controller;
 
 use TelNowEdge\FreePBX\Base\Controller\AbstractController;
 use TelNowEdge\Module\tnetc\Form\TimeConditionType;
+use TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionDbHandler;
 use TelNowEdge\Module\tnetc\Model\TimeCondition;
 
 class TimeConditionController extends AbstractController
@@ -40,13 +41,12 @@ class TimeConditionController extends AbstractController
 
         $form->handleRequest($request);
 
-                    xdebug_break();
-
         if (true === $form->isValid() && true === $form->isSubmitted()) {
+            needreload();
 
-            $a = '';
-                    xdebug_break();
-            /* needreload(); */
+            $this->get(TimeConditionDbHandler::class)
+                 ->create($form->getData())
+                ;
 
             /* redirect( */
             /*     sprintf('config.php?display=fagi&id=%d', $form->getData()->getId()) */
