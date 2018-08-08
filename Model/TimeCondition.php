@@ -62,6 +62,7 @@ class TimeCondition
 
     public function __construct()
     {
+        $this->dayNight = new DayNight();
         $this->fallback = new \TelNowEdge\FreePBX\Base\Form\Model\Destination();
         $this->timeConditionBlocks = new \Doctrine\Common\Collections\ArrayCollection(array(
             new TimeConditionBlock(true),
@@ -109,8 +110,17 @@ class TimeCondition
         return $this->dayNight;
     }
 
+    /* PolyMorphy to prevent error because form allow null value. So when form is binded null */
     public function setDayNight($dayNight)
     {
+        if (null === $dayNight) {
+            $dayNight = new DayNight();
+        }
+
+        if (false === is_a($dayNight, DayNight::class)) {
+            throw new \InvalidArgumentException();
+        }
+
         $this->dayNight = $dayNight;
 
         return $this;

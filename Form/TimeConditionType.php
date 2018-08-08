@@ -24,7 +24,9 @@ use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TelNowEdge\FreePBX\Base\Form\DestinationType;
+use TelNowEdge\FreePBX\Base\Form\RepositoryType;
 use TelNowEdge\Module\tnetc\Model\TimeCondition;
+use TelNowEdge\Module\tnetc\Repository\DayNightRepository;
 
 class TimeConditionType extends AbstractType
 {
@@ -33,7 +35,18 @@ class TimeConditionType extends AbstractType
         $builder
             ->add('name')
             ->add('internalDial')
-            ->add('dayNight')
+            ->add('dayNight', RepositoryType::class, array(
+                'repository' => DayNightRepository::class,
+                'caller' => 'getCollection',
+                'choice_label' => function ($x) {
+                    return sprintf('[%d] %s', $x->getExt(), $x->getFcDescription());
+                },
+                'choice_value' => function ($x) {
+                    return $x->getExt();
+                },
+                'placeholder' => '-',
+                'required' => false,
+            ))
             ->add('timezone', TimezoneType::class, array(
                 'preferred_choices' => array('Europe/Paris'),
             ))
