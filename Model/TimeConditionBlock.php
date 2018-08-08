@@ -53,18 +53,44 @@ class TimeConditionBlock
      */
     protected $timeConditionBlockTgs;
 
+    /**
+     * @Assert\Type("\Doctrine\Common\Collections\ArrayCollection")
+     * @Assert\Valid(traverse=true)
+     * @Assert\All({
+     *   @Assert\Type("\TelNowEdge\Module\tnetc\Model\TimeConditionBlockCalendar")
+     * })
+     */
+    protected $timeConditionBlockCalendars;
+
+    /**
+     * @Assert\Type("\Doctrine\Common\Collections\ArrayCollection")
+     * @Assert\Valid(traverse=true)
+     * @Assert\All({
+     *   @Assert\Type("\TelNowEdge\Module\tnetc\Model\TimeConditionBlockHint")
+     * })
+     * @Assert\Count(
+     *   max=1,
+     *   maxMessage="Only 1 BLF by block"
+     * )
+     */
+    protected $timeConditionBlockHints;
+
     public function __construct($child = false)
     {
+        $this->weight = 0;
         $this->timeConditionBlockTgs = new \Doctrine\Common\Collections\ArrayCollection(array(
             new TimeConditionBlockTg(true),
-            new TimeConditionBlockTg(true),
-            new TimeConditionBlockTg(true),
+        ));
+        $this->timeConditionBlockCalendars = new \Doctrine\Common\Collections\ArrayCollection(array(
+            new TimeConditionBlockCalendar(true),
+        ));
+        $this->timeConditionBlockHints = new \Doctrine\Common\Collections\ArrayCollection(array(
+            new TimeConditionBlockHint(true),
         ));
 
         if (true === $child) {
             return;
         }
-
         $this->goto = new Destination();
         $this->timeCondition = new TimeCondition();
         $this->timeConditionBlockTgs = new ArrayCollection();
@@ -150,6 +176,78 @@ class TimeConditionBlock
     public function removeTimeConditionBlockTg(TimeConditionBlockTg $timeConditionBlockTg)
     {
         $this->timeConditionBlockTgs->removeElement($timeConditionBlockTg);
+
+        return $this;
+    }
+
+    public function getTimeConditionBlockCalendars()
+    {
+        return $this->timeConditionBlockCalendars;
+    }
+
+    public function setTimeConditionBlockCalendars(array $timeConditionBlockCalendars)
+    {
+        foreach ($timeConditionBlockCalendars as $timeConditionBlockCalendar) {
+            $this->addTimeConditionBlockCalendar($timeConditionBlockCalendar);
+        }
+
+        return $this;
+    }
+
+    public function addTimeConditionBlockCalendar(TimeConditionBlockCalendar $timeConditionBlockCalendar)
+    {
+        if (true === $this->timeConditionBlockCalendars->exists(function ($key, $object) use ($timeConditionBlockCalendar) {
+            return $object->getId() === $timeConditionBlockCalendar->getId();
+        }) && null !== $timeConditionBlockCalendar->getId()) {
+            return $this;
+        }
+
+        $timeConditionBlockCalendar->setTimeConditionBlock($this);
+
+        $this->timeConditionBlockCalendars->add($timeConditionBlockCalendar);
+
+        return $this;
+    }
+
+    public function removeTimeConditionBlockCalendar(TimeConditionBlockCalendar $timeConditionBlockCalendar)
+    {
+        $this->timeConditionBlockCalendars->removeElement($timeConditionBlockCalendar);
+
+        return $this;
+    }
+
+    public function getTimeConditionBlockHints()
+    {
+        return $this->timeConditionBlockHints;
+    }
+
+    public function setTimeConditionBlockHints(array $timeConditionBlockHints)
+    {
+        foreach ($timeConditionBlockHints as $timeConditionBlockHint) {
+            $this->addTimeConditionBlockHint($timeConditionBlockHint);
+        }
+
+        return $this;
+    }
+
+    public function addTimeConditionBlockHint(TimeConditionBlockHint $timeConditionBlockHint)
+    {
+        if (true === $this->timeConditionBlockHints->exists(function ($key, $object) use ($timeConditionBlockHint) {
+            return $object->getId() === $timeConditionBlockHint->getId();
+        }) && null !== $timeConditionBlockHint->getId()) {
+            return $this;
+        }
+
+        $timeConditionBlockHint->setTimeConditionBlock($this);
+
+        $this->timeConditionBlockHints->add($timeConditionBlockHint);
+
+        return $this;
+    }
+
+    public function removeTimeConditionBlockHint(TimeConditionBlockHint $timeConditionBlockHint)
+    {
+        $this->timeConditionBlockHints->removeElement($timeConditionBlockHint);
 
         return $this;
     }

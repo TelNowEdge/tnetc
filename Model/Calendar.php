@@ -18,26 +18,17 @@
 
 namespace TelNowEdge\Module\tnetc\Model;
 
-class TimeConditionBlockCalendar
+class Calendar
 {
-    use TimeConditionBlockTrait;
-
     protected $id;
 
-    protected $timeConditionBlock;
+    protected $name;
 
-    protected $policy;
+    protected $description;
 
-    protected $calendar;
+    protected $type;
 
-    public function __construct($child = true)
-    {
-        if (true === $child) {
-            return;
-        }
-
-        $this->timeConditionBlock = new TimeConditionBlock();
-    }
+    protected $timezone;
 
     public function getId()
     {
@@ -51,26 +42,50 @@ class TimeConditionBlockCalendar
         return $this;
     }
 
-    public function getPolicy()
+    public function getName()
     {
-        return $this->policy;
+        return $this->name;
     }
 
-    public function setPolicy($policy)
+    public function setName($name)
     {
-        $this->policy = $policy;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getCalendar()
+    public function getDescription()
     {
-        return $this->calendar;
+        return $this->description;
     }
 
-    public function setCalendar($calendar)
+    public function setDescription($description)
     {
-        $this->calendar = $calendar;
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getTimezone()
+    {
+        return $this->timezone;
+    }
+
+    public function setTimezone($timezone)
+    {
+        $this->timezone = $timezone;
 
         return $this;
     }

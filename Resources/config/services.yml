@@ -3,3 +3,5 @@ services:
     autowire: true
     autoconfigure: false
     public: true
+
+  TelNowEdge\Module\tnetc\Helper\CalendarHelper: ~

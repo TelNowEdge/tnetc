@@ -64,4 +64,64 @@
  const removePrefix = (elem) => {
    elem.remove();
  }
+
+ const process = (dataName, blockName) => {
+   addDeleteButton(dataName);
+
+   $('div[data-child]')
+     .each((i, e) => {
+       const buttonExists = $(e)
+         .find(`#${$(e).attr('id')}_${blockName}`)
+         .closest('div.form-group')
+         .find('.tne-add')
+         .length
+       ;
+
+       if (buttonExists !== 0) {
+         return;
+       }
+
+       const parentId = $(e)
+         .attr('id')
+         .replace(/.*_(\d+)/, "$1")
+       ;
+
+       let maxId = 0;
+
+       $(e)
+         .find('div[data-child-hint]')
+         .each((j, x) => {
+           const id = $(e)
+             .attr('id')
+             .replace(/.*_(\d+)/, "$1")
+           ;
+
+           maxId = maxId < id ? id : maxId;
+         });
+
+       $(e)
+         .find(`#${$(e).attr('id')}_${blockName}`)
+         .closest('.form-group')
+         .find('div.control-label')
+         .find('div.row')
+         .eq(0)
+         .append(
+           $('<div />', {
+             class: 'col-md-10',
+           }).append(
+             $('<a />', {
+               class: 'btn btn-success tne-add tne-add-hint',
+             }).append(
+               $('<i />', {
+                 class: 'fa fa-plus'
+               })
+             ).on('click', () => {
+               maxId++
+               addBlock(`#time_condition_timeConditionBlocks_${parentId}_${blockName}`, maxId);
+               addDeleteButton(dataName);
+             })
+           )
+         )
+     });
+ }
 </script>

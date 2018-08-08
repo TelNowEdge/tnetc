@@ -20,6 +20,7 @@ namespace TelNowEdge\Module\tnetc\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use TelNowEdge\FreePBX\Base\Form\DestinationType;
@@ -30,6 +31,7 @@ class TimeConditionBlockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('weight', HiddenType::class)
             ->add('timeConditionBlockTgs', CollectionType::class, array(
                 'label' => 'Time group',
                 'entry_type' => TimeConditionBlockTgType::class,
@@ -37,6 +39,34 @@ class TimeConditionBlockType extends AbstractType
                     'label' => false,
                     'attr' => array(
                         'data-child-tg' => true,
+                    ),
+                ),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => true,
+            ))
+            ->add('timeConditionBlockCalendars', CollectionType::class, array(
+                'label' => 'Calendar',
+                'entry_type' => TimeConditionBlockCalendarType::class,
+                'entry_options' => array(
+                    'label' => false,
+                    'attr' => array(
+                        'data-child-calendar' => true,
+                    ),
+                ),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => true,
+            ))
+            ->add('timeConditionBlockHints', CollectionType::class, array(
+                'label' => 'BLF',
+                'entry_type' => TimeConditionBlockHintType::class,
+                'entry_options' => array(
+                    'label' => false,
+                    'attr' => array(
+                        'data-child-hint' => true,
                     ),
                 ),
                 'allow_add' => true,

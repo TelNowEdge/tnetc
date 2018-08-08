@@ -65,8 +65,6 @@ class TimeCondition
         $this->fallback = new \TelNowEdge\FreePBX\Base\Form\Model\Destination();
         $this->timeConditionBlocks = new \Doctrine\Common\Collections\ArrayCollection(array(
             new TimeConditionBlock(true),
-            new TimeConditionBlock(true),
-            new TimeConditionBlock(true),
         ));
     }
 

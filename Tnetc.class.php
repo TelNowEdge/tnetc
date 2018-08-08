@@ -78,6 +78,47 @@ class Tnetc extends Module implements \BMO
         }
     }
 
+    public function getActionBar()
+    {
+        $request = $this->get('request');
+
+        if ('tnetc' !== $request->query->get('display')) {
+            return array();
+        }
+
+        if (false === $request->query->has('action') && false === $request->query->has('id')) {
+            return array();
+        }
+
+        $buttons = array(
+            'reset' => array(
+                'name' => 'reset',
+                'id' => 'reset',
+                'value' => _('Reset'),
+            ),
+            'submit' => array(
+                'name' => 'submit',
+                'id' => 'submit',
+                'value' => _('Submit'),
+            ),
+        );
+
+        if (true === $request->query->has('id')) {
+            $buttons['delete'] = array(
+                'name' => 'delete',
+                'id' => 'delete',
+                'value' => _('Delete'),
+            );
+            $buttons['duplicate'] = array(
+                'name' => 'duplicate',
+                'id' => 'duplicate',
+                'value' => _('Duplicate'),
+            );
+        }
+
+        return $buttons;
+    }
+
     public function getRightNav()
     {
         $request = $this->get('request');

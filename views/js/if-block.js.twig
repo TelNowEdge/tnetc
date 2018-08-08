@@ -1,30 +1,36 @@
 <script type="text/javascript">
+ const sortableDone = (e, x) => {
+   $('#time_condition_timeConditionBlocks')
+     .children('.element-container')
+     .each(reOrder)
+   ;
+ }
+
+ const reOrder = (i, e) => {
+   $(e)
+     .find('.form-control')
+     .each((j, x) => {
+       $(x).attr('id', $(x).attr('id').replace(/_\d+_/, `_${i}_`));
+       $(x).attr('name', $(x).attr('name').replace(/\[\d+\]/, `[${i}]`));
+     });
+
+   $(`#time_condition_timeConditionBlocks_${i}_weight`)
+     .val(i)
+   ;
+
+   processForm(
+     `#time_condition_timeConditionBlocks_${i}_goto_Category`,
+     `#time_condition_timeConditionBlocks_${i}_goto_Destination`
+   );
+ };
+
  $(document).ready(() => {
-   const reOrder = (i, e) => {
-     $(e)
-       .find('.form-control')
-       .each((j, x) => {
-         $(x).attr('id', $(x).attr('id').replace(/_\d+_/, `_${i}_`));
-         $(x).attr('name', $(x).attr('name').replace(/\[\d+\]/, `[${i}]`));
-       });
-
-     processForm(
-       `#time_condition_timeConditionBlocks_${i}_goto_Category`,
-       `#time_condition_timeConditionBlocks_${i}_goto_Destination`
-     );
-   };
-
    $('#time_condition_timeConditionBlocks')
      .sortable({
        connectWith: '.element-container',
        axis: 'y',
        opacity: 0.75,
-       update: (e, x) => {
-         $('#time_condition_timeConditionBlocks')
-           .children('.element-container')
-           .each(reOrder)
-         ;
-       }
+       update: sortableDone
      });
  });
 </script>
@@ -79,10 +85,7 @@
          maxId++
          addBlock('#time_condition_timeConditionBlocks', maxId);
          addDeleteButton('data-child');
-         processForm(
-           `#time_condition_timeConditionBlocks_${maxId}_goto_Category`,
-           `#time_condition_timeConditionBlocks_${maxId}_goto_Destination`
-         );
+         sortableDone();
 
          $(document).trigger('tnetc::if-block::add');
        })

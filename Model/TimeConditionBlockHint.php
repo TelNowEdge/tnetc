@@ -28,8 +28,12 @@ class TimeConditionBlockHint
 
     protected $type;
 
-    public function __construct()
+    public function __construct($child = false)
     {
+        if (true === $child) {
+            return;
+        }
+
         $this->timeConditionBlock = new TimeConditionBlock();
     }
 
@@ -56,5 +60,4 @@ class TimeConditionBlockHint
 
         return $this;
     }
-
 }
