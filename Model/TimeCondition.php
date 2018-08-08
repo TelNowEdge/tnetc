@@ -63,7 +63,11 @@ class TimeCondition
     public function __construct()
     {
         $this->fallback = new \TelNowEdge\FreePBX\Base\Form\Model\Destination();
-        $this->timeConditionBlocks = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->timeConditionBlocks = new \Doctrine\Common\Collections\ArrayCollection(array(
+            new TimeConditionBlock(true),
+            new TimeConditionBlock(true),
+            new TimeConditionBlock(true),
+        ));
     }
 
     public function getId()
@@ -178,5 +182,4 @@ class TimeCondition
 
         return $this;
     }
-
 }

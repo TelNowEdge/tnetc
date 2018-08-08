@@ -1,0 +1,8 @@
+.tne-add {
+    margin-left: 10%;
+    margin-bottom: 10px;
+}
+
+#time_condition_timeConditionBlocks > .element-container {
+    cursor: move;
+}

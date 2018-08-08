@@ -18,24 +18,11 @@
 
 namespace TelNowEdge\Module\tnetc\Model;
 
-class TimeConditionBlockTg
+class TimeGroup
 {
-    use TimeConditionBlockTrait;
-
     protected $id;
 
-    protected $timeConditionBlock;
-
-    protected $timeGroup;
-
-    public function __construct($child = false)
-    {
-        if (true === $child) {
-            return;
-        }
-
-        $this->timeConditionBlock = new TimeConditionBlock();
-    }
+    protected $description;
 
     public function getId()
     {
@@ -49,14 +36,14 @@ class TimeConditionBlockTg
         return $this;
     }
 
-    public function getTimeGroup()
+    public function getDescription()
     {
-        return $this->timeGroup;
+        return $this->description;
     }
 
-    public function setTimeGroup($timeGroup)
+    public function setDescription($description)
     {
-        $this->timeGroup = $timeGroup;
+        $this->description = $description;
 
         return $this;
     }

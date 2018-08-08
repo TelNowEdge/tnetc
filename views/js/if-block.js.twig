@@ -1,0 +1,92 @@
+<script type="text/javascript">
+ $(document).ready(() => {
+   const reOrder = (i, e) => {
+     $(e)
+       .find('.form-control')
+       .each((j, x) => {
+         $(x).attr('id', $(x).attr('id').replace(/_\d+_/, `_${i}_`));
+         $(x).attr('name', $(x).attr('name').replace(/\[\d+\]/, `[${i}]`));
+       });
+
+     processForm(
+       `#time_condition_timeConditionBlocks_${i}_goto_Category`,
+       `#time_condition_timeConditionBlocks_${i}_goto_Destination`
+     );
+   };
+
+   $('#time_condition_timeConditionBlocks')
+     .sortable({
+       connectWith: '.element-container',
+       axis: 'y',
+       opacity: 0.75,
+       update: (e, x) => {
+         $('#time_condition_timeConditionBlocks')
+           .children('.element-container')
+           .each(reOrder)
+         ;
+       }
+     });
+ });
+</script>
+
+<script type="text/javascript">
+ $(document).ready(() => {
+   addDeleteButton('data-child');
+
+   $('#time_condition_timeConditionBlocks')
+     .children('.element-container')
+     .each((i, x) => {
+       /* processForm is an helper defined by freepbx-base */
+       processForm(
+         `#time_condition_timeConditionBlocks_${i}_goto_Category`,
+         `#time_condition_timeConditionBlocks_${i}_goto_Destination`
+       );
+     });
+
+   processForm(
+     '#time_condition_fallback_Category',
+     '#time_condition_fallback_Destination'
+   );
+ });
+</script>
+
+<script type="text/javascript">
+ $(document).ready(() => {
+   let maxId = 0;
+   $('div[data-child]')
+     .each((i, e) => {
+       const id = $(e)
+         .attr('id')
+         .replace(/.*_(\d+)/, "$1")
+       ;
+
+       maxId = maxId < id ? id : maxId;
+     });
+
+   $('#time_condition_timeConditionBlocks')
+     .closest('.form-group')
+     .find('div.control-label')
+     .find('i')
+     .eq(0)
+     .after(
+       $('<a />', {
+         class: 'btn btn-success tne-add tne-add-if',
+       }).append(
+         $('<i />', {
+           class: 'fa fa-plus'
+         })
+       ).on('click', (e) => {
+         maxId++
+         addBlock('#time_condition_timeConditionBlocks', maxId);
+         addDeleteButton('data-child');
+         processForm(
+           `#time_condition_timeConditionBlocks_${maxId}_goto_Category`,
+           `#time_condition_timeConditionBlocks_${maxId}_goto_Destination`
+         );
+
+         $(document).trigger('tnetc::if-block::add');
+       })
+     )
+   ;
+ });
+</script>

@@ -1,0 +1,67 @@
+<script type="text/javascript">
+ const addBlock = (elem, maxId) => {
+   let prototype = $(elem)
+     .data('prototype')
+     .replace(/__name__/g, maxId)
+   ;
+
+   $(elem)
+     .append(
+       $('<div />', {
+         class: 'element-container'
+       }).append(
+         $('<div />', {
+           class: 'row'
+         }).append(
+           $('<div />', {
+             class: 'col-md-12'
+           }).append(
+             $('<div />', {
+               class: 'row'
+             }).append(prototype)
+           )
+         )
+       )
+     )
+   ;
+ }
+
+ const addDeleteButton = (data) => {
+   $(`div[${data}]`)
+     .each((i, e) => {
+       const buttonIsAdded = $(e).find('[data-delete]').length;
+       if (buttonIsAdded !== 0) {
+         return; // e.g. continue
+       }
+       const elem = $(e);
+
+       elem
+         .append(
+           $('<div />', {
+             class: 'element-container',
+             attr: {
+               'data-delete': true
+             }
+           }).append(
+             $('<div />', {
+               class: 'row'
+             })
+           ).append(
+             $('<a />', {
+               class: 'btn btn-danger'
+             }).append(
+               $('<i />', {
+                 class: 'fa fa-minus-circle'
+               })
+             ).on('click', (e) => {
+               removePrefix(elem.closest('.element-container'));
+             })
+           )
+         );
+     });
+ }
+
+ const removePrefix = (elem) => {
+   elem.remove();
+ }
+</script>

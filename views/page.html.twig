@@ -63,7 +63,7 @@
    ;
  }
 
- $('#table-fagi').on('load-success.bs.table', function () {
+ $('#table-tnetc').on('load-success.bs.table', function () {
    $('a.delete')
      .on('click', function () {
        if (!confirm(_("Are you sure you wish to delete?"))) {
@@ -71,7 +71,7 @@
        }
 
        const id = $(this).data('id');
-       $.post("ajax.php", {module: 'modfagi', command: 'deleteFagi', id })
+       $.post("ajax.php", {module: 'modtnetc', command: 'deleteTnetc', id })
         .then(function (res) {
           if (res.success === false) {
             alert('Failed to delete this item');

@@ -1,0 +1,65 @@
+<script type="text/javascript">
+ $(document).ready(() => {
+   $(document)
+     .on('tnetc::if-block::add', (e) => {
+       process();
+     });
+
+   process();
+ })
+
+ const process = () => {
+   addDeleteButton('data-child-tg');
+
+   $('div[data-child]')
+     .each((i, e) => {
+       const buttonExists = $(e)
+         .closest('.form-group')
+         .find('div.control-label')
+         .find('.tne-add')
+         .length
+       ;
+
+       if (buttonExists !== 0) {
+         return;
+       }
+
+       const parentId = $(e)
+         .attr('id')
+         .replace(/.*_(\d+)/, "$1")
+       ;
+
+       let maxId = 0;
+
+       $(e)
+         .find('div[data-child-tg]')
+         .each((j, x) => {
+           const id = $(e)
+             .attr('id')
+             .replace(/.*_(\d+)/, "$1")
+           ;
+
+           maxId = maxId < id ? id : maxId;
+         });
+
+       $(e)
+         .closest('.form-group')
+         .find('div.control-label')
+         .find('i')
+         .eq(0)
+         .after(
+           $('<a />', {
+             class: 'btn btn-success tne-add tne-add-tg',
+           }).append(
+             $('<i />', {
+               class: 'fa fa-plus'
+             })
+           ).on('click', () => {
+             maxId++
+             addBlock(`#time_condition_timeConditionBlocks_${parentId}_timeConditionBlockTgs`, maxId);
+             addDeleteButton('data-child-tg');
+           })
+         )
+     });
+ }
+</script>

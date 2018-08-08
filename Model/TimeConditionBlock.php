@@ -18,6 +18,7 @@
 
 namespace TelNowEdge\Module\tnetc\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use TelNowEdge\FreePBX\Base\Form\Model\Destination;
 
@@ -43,10 +44,30 @@ class TimeConditionBlock
      */
     protected $timeCondition;
 
-    public function __construct()
+    /**
+     * @Assert\Type("\Doctrine\Common\Collections\ArrayCollection")
+     * @Assert\Valid(traverse=true)
+     * @Assert\All({
+     *   @Assert\Type("\TelNowEdge\Module\tnetc\Model\TimeConditionBlockTg")
+     * })
+     */
+    protected $timeConditionBlockTgs;
+
+    public function __construct($child = false)
     {
-        $this->fagi = new TimeCondition();
+        $this->timeConditionBlockTgs = new \Doctrine\Common\Collections\ArrayCollection(array(
+            new TimeConditionBlockTg(true),
+            new TimeConditionBlockTg(true),
+            new TimeConditionBlockTg(true),
+        ));
+
+        if (true === $child) {
+            return;
+        }
+
         $this->goto = new Destination();
+        $this->timeCondition = new TimeCondition();
+        $this->timeConditionBlockTgs = new ArrayCollection();
     }
 
     public function getId()
@@ -97,4 +118,39 @@ class TimeConditionBlock
         return $this;
     }
 
+    public function getTimeConditionBlockTgs()
+    {
+        return $this->timeConditionBlockTgs;
+    }
+
+    public function setTimeConditionBlockTgs(array $timeConditionBlockTgs)
+    {
+        foreach ($timeConditionBlockTgs as $timeConditionBlockTg) {
+            $this->addTimeConditionBlockTg($timeConditionBlockTg);
+        }
+
+        return $this;
+    }
+
+    public function addTimeConditionBlockTg(TimeConditionBlockTg $timeConditionBlockTg)
+    {
+        if (true === $this->timeConditionBlockTgs->exists(function ($key, $object) use ($timeConditionBlockTg) {
+            return $object->getId() === $timeConditionBlockTg->getId();
+        }) && null !== $timeConditionBlockTg->getId()) {
+            return $this;
+        }
+
+        $timeConditionBlockTg->setTimeConditionBlock($this);
+
+        $this->timeConditionBlockTgs->add($timeConditionBlockTg);
+
+        return $this;
+    }
+
+    public function removeTimeConditionBlockTg(TimeConditionBlockTg $timeConditionBlockTg)
+    {
+        $this->timeConditionBlockTgs->removeElement($timeConditionBlockTg);
+
+        return $this;
+    }
 }

@@ -1,0 +1,40 @@
+{% include '@telnowedge/js/destination.js.twig' %}
+{% import '@telnowedge/Form/macro/usedBy.html.twig' as macro %}
+
+<link rel="stylesheet" href="assets/modfagi/css/modfagi.css">
+
+<div class="fpbx-container container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="display no-border">
+        <div class="container-fluid">
+          <div class="section-title">
+            <div class="row">
+              <div class="form-group">
+                <h3>
+                  {{ 'Time condition' | fpbxtrans }}
+                </h3>
+              </div>
+            </div>
+            {{ macro.usedBy(usedBy) }}
+          </div>
+          <div class="section">
+            <form
+              class="popover-form fpbx-submit"
+              name="frm_fagi"
+              method="post"
+              action=""
+              data-fpbx-delete="{{ id is null ? '' : 'config.php?display=tnecf&id=' ~ id ~ '&action=del' }}"
+            >
+              {{ form_widget(form) }}
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include '@tnetc/js/common-block.js.twig' %}
+{% include '@tnetc/js/if-block.js.twig' %}
+{% include '@tnetc/js/tg-block.js.twig' %}

@@ -9,3 +9,9 @@ services:
     autowire: true
     autoconfigure: false
     public: true
+
+  TelNowEdge\Module\tnetc\Repository\TimeGroupRepository:
+    parent: TelNowEdge\FreePBX\Base\Repository\AbstractRepository
+    autowire: true
+    autoconfigure: false
+    public: true

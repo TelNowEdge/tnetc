@@ -20,12 +20,40 @@ namespace TelNowEdge\Module\tnetc\Controller;
 
 use TelNowEdge\FreePBX\Base\Controller\AbstractController;
 use TelNowEdge\FreePBX\Base\Exception\NoResultException;
+use TelNowEdge\Module\tnetc\Form\TimeConditionType;
+use TelNowEdge\Module\tnetc\Model\TimeCondition;
 
 class TimeConditionController extends AbstractController
 {
     public function getRightNav()
     {
         return $this->render('right-nav.html.twig');
+    }
+
+    public function createAction()
+    {
+        $request = $this->get('request');
+
+        $form = $this->createForm(
+            TimeConditionType::class,
+            new TimeCondition()
+        );
+
+        $form->handleRequest($request);
+
+        if (true === $form->isValid() && true === $form->isSubmitted()) {
+            needreload();
+
+            /* $this->get(FagiDbHandler::class) */
+            /*      ->create($form->getData()) */
+            /*     ; */
+
+            redirect(
+                sprintf('config.php?display=fagi&id=%d', $form->getData()->getId())
+            );
+        }
+
+        return $this->processForm($form);
     }
 
     public static function getViewsDir()
@@ -36,5 +64,14 @@ class TimeConditionController extends AbstractController
     public static function getViewsNamespace()
     {
         return 'tnetc';
+    }
+
+    private function processForm(\Symfony\Component\Form\Form $form, $id = null, $usedBy = null)
+    {
+        return $this->render('form.html.twig', array(
+            'form' => $form->createView(),
+            'id' => $id,
+            'usedBy' => $usedBy,
+        ));
     }
 }
