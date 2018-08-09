@@ -109,8 +109,6 @@ UPDATE
 
         $stmt->execute();
 
-        $timeCondition->setId($this->connection->lastInsertId());
-
         $this->eventDispatcher->dispatch(
             TimeConditionEvent::UPDATE_POST_SAVE,
             new TimeConditionEvent($timeCondition)
