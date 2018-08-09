@@ -9,3 +9,27 @@ services:
     autowire: true
     autoconfigure: false
     public: true
+
+  TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionBlockDbHandler:
+    parent: TelNowEdge\FreePBX\Base\Handler\AbstractDbHandler
+    autowire: true
+    autoconfigure: false
+    public: true
+
+  TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionBlockTgDbHandler:
+    parent: TelNowEdge\FreePBX\Base\Handler\AbstractDbHandler
+    autowire: true
+    autoconfigure: false
+    public: true
+
+  TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionBlockCalendarDbHandler:
+    parent: TelNowEdge\FreePBX\Base\Handler\AbstractDbHandler
+    autowire: true
+    autoconfigure: false
+    public: true
+
+  TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionBlockHintDbHandler:
+    parent: TelNowEdge\FreePBX\Base\Handler\AbstractDbHandler
+    autowire: true
+    autoconfigure: false
+    public: true
