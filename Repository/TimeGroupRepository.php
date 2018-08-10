@@ -42,6 +42,22 @@ SELECT
         return $this->collection($res);
     }
 
+    public function getById($id)
+    {
+        $sql = sprintf('%s WHERE tg.id = :id', self::SQL);
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('id', $id);
+
+        $stmt->execute();
+
+        return $this->mapModel(
+            $this->sqlToArray(
+                $this->fetch($stmt)
+            )
+        );
+    }
+
     private function collection(array $res)
     {
         $collection = new ArrayCollection();
