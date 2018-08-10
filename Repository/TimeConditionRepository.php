@@ -21,8 +21,12 @@ namespace TelNowEdge\Module\tnetc\Repository;
 use Doctrine\Common\Collections\ArrayCollection;
 use TelNowEdge\FreePBX\Base\Form\Model\Destination;
 use TelNowEdge\FreePBX\Base\Repository\AbstractRepository;
+use TelNowEdge\Module\tnetc\Helper\CalendarHelper;
 use TelNowEdge\Module\tnetc\Model\TimeCondition;
 use TelNowEdge\Module\tnetc\Model\TimeConditionBlock;
+use TelNowEdge\Module\tnetc\Model\TimeConditionBlockCalendar;
+use TelNowEdge\Module\tnetc\Model\TimeConditionBlockHint;
+use TelNowEdge\Module\tnetc\Model\TimeConditionBlockTg;
 
 class TimeConditionRepository extends AbstractRepository
 {
@@ -35,11 +39,12 @@ SELECT
         ,tc.timezone tc__timezone
         ,tc.fallback fallback__destination
         ,tcb.id tcb__id
-        ,tcb.goto destination__destination
+        ,tcb.goto block__destination
         ,tcb.weight tcb__weight
         ,tcbtg.id tcbtg__id
-        ,tcbtg.timegroups_groups_id tcbtg__timegroups_groups
+        ,tcbtg.timegroups_groups_id tcbtg__time_group
         ,tcbc.id tcbc__id
+        ,tcbc.policy tcbc__policy
         ,tcbc.calendar_id tcbc__calendar
         ,tcbh.id tcbh__id
         ,tcbh.type tcbh__type
@@ -58,6 +63,18 @@ SELECT
             tcbh.tne_time_condition_block_id = tcb.id
         )
 ';
+
+    private $calendarHelper;
+
+    private $timeGroupRepository;
+
+    public function __construct(
+        TimeGroupRepository $timeGroupRepository,
+        CalendarHelper $calendarHelper
+    ) {
+        $this->calendarHelper = $calendarHelper;
+        $this->timeGroupRepository = $timeGroupRepository;
+    }
 
     public function getCollection()
     {
@@ -116,17 +133,47 @@ SELECT
     {
         $tc = $this->objectFromArray(TimeCondition::class, $res['tc']);
         $tcb = $this->objectFromArray(TimeConditionBlock::class, $res['tcb']);
-        /* $tcbtg = $this->objectFromArray(TimeConditionBlockTg::class, $res['tcbtg']); */
-        /* $tcbc = $this->objectFromArray(TimeConditionBlockCalendar::class, $res['tcbc']); */
-        /* $tcbh = $this->objectFromArray(TimeConditionBlockHint::class, $res['tcbh']); */
-        $goto = $this->objectFromArray(Destination::class, $res['destination']);
+        $tcbtg = $this->objectFromArray(TimeConditionBlockTg::class, $res['tcbtg']);
+        $tcbc = $this->objectFromArray(TimeConditionBlockCalendar::class, $res['tcbc']);
+        $tcbh = $this->objectFromArray(TimeConditionBlockHint::class, $res['tcbh']);
+        $goto = $this->objectFromArray(Destination::class, $res['block']);
         $fallback = $this->objectFromArray(Destination::class, $res['fallback']);
 
-        $tcb->setGoto($goto);
+        $tcb
+            ->setGoto($goto)
+            ->setTimeConditionBlockTgs(array($tcbtg))
+            ->setTimeConditionBlockCalendars(array($tcbc))
+            ->setTimeConditionBlockHints(array($tcbh))
+            ;
 
-        return $tc
+        $tc
             ->setFallback($fallback)
             ->setTimeConditionBlocks(array($tcb))
             ;
+
+        $this->fakeJoin($tc);
+
+        return $tc;
+    }
+
+    private function fakeJoin(TimeCondition $tc)
+    {
+        foreach ($tc->getTimeConditionBlocks() as $block) {
+            foreach ($block->getTimeConditionBlockTgs() as $x) {
+                $res = $this->timeGroupRepository
+                    ->getById($x->getTimeGroup())
+                    ;
+
+                $x->setTimeGroup($res);
+            }
+
+            foreach ($block->getTimeConditionBlockCalendars() as $x) {
+                $res = $this->calendarHelper
+                    ->getById($x->getCalendar())
+                    ;
+
+                $x->setCalendar($res);
+            }
+        }
     }
 }

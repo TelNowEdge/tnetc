@@ -162,6 +162,8 @@ class TimeCondition
 
     public function setTimeConditionBlocks(array $timeConditionBlocks)
     {
+        $this->timeConditionBlocks->clear();
+
         foreach ($timeConditionBlocks as $timeConditionBlock) {
             $this->addTimeConditionBlock($timeConditionBlock);
         }
@@ -171,15 +173,25 @@ class TimeCondition
 
     public function addTimeConditionBlock(TimeConditionBlock $timeConditionBlock)
     {
-        if (true === $this->timeConditionBlocks->exists(function ($key, $object) use ($timeConditionBlock) {
-            return $object->getId() === $timeConditionBlock->getId();
-        }) && null !== $timeConditionBlock->getId()) {
-            return $this;
+        if (null !== $object = $this->timeConditionBlocks->get($timeConditionBlock->getId())) {
+            false === $timeConditionBlock->getTimeConditionBlockTgs()->isEmpty()
+                ? $object->addTimeConditionBlockTg($timeConditionBlock->getTimeConditionBlockTgs()->first())
+                : '';
+
+            false === $timeConditionBlock->getTimeConditionBlockCalendars()->isEmpty()
+                ? $object->addTimeConditionBlockCalendar($timeConditionBlock->getTimeConditionBlockCalendars()->first())
+                : '';
+
+            false === $timeConditionBlock->getTimeConditionBlockHints()->isEmpty()
+                ? $object->addTimeConditionBlockHint($timeConditionBlock->getTimeConditionBlockHints()->first())
+                : '';
+
+            return;
         }
 
         $timeConditionBlock->setTimeCondition($this);
 
-        $this->timeConditionBlocks->add($timeConditionBlock);
+        $this->timeConditionBlocks->set($timeConditionBlock->getId(), $timeConditionBlock);
 
         return $this;
     }

@@ -18,7 +18,6 @@
 
 namespace TelNowEdge\Module\tnetc\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use TelNowEdge\FreePBX\Base\Form\Model\Destination;
 
@@ -89,7 +88,6 @@ class TimeConditionBlock
         }
         $this->goto = new Destination();
         $this->timeCondition = new TimeCondition();
-        $this->timeConditionBlockTgs = new ArrayCollection();
     }
 
     public function getId()
@@ -147,6 +145,8 @@ class TimeConditionBlock
 
     public function setTimeConditionBlockTgs(array $timeConditionBlockTgs)
     {
+        $this->timeConditionBlockTgs->clear();
+
         foreach ($timeConditionBlockTgs as $timeConditionBlockTg) {
             $this->addTimeConditionBlockTg($timeConditionBlockTg);
         }
@@ -158,7 +158,7 @@ class TimeConditionBlock
     {
         if (true === $this->timeConditionBlockTgs->exists(function ($key, $object) use ($timeConditionBlockTg) {
             return $object->getId() === $timeConditionBlockTg->getId();
-        }) && null !== $timeConditionBlockTg->getId()) {
+        }) || null === $timeConditionBlockTg->getId()) {
             return $this;
         }
 
@@ -194,7 +194,7 @@ class TimeConditionBlock
     {
         if (true === $this->timeConditionBlockCalendars->exists(function ($key, $object) use ($timeConditionBlockCalendar) {
             return $object->getId() === $timeConditionBlockCalendar->getId();
-        }) && null !== $timeConditionBlockCalendar->getId()) {
+        }) || null === $timeConditionBlockCalendar->getId()) {
             return $this;
         }
 
@@ -230,7 +230,7 @@ class TimeConditionBlock
     {
         if (true === $this->timeConditionBlockHints->exists(function ($key, $object) use ($timeConditionBlockHint) {
             return $object->getId() === $timeConditionBlockHint->getId();
-        }) && null !== $timeConditionBlockHint->getId()) {
+        }) || null === $timeConditionBlockHint->getId()) {
             return $this;
         }
 

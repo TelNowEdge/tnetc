@@ -6,6 +6,9 @@ services:
 
   TelNowEdge\Module\tnetc\Repository\TimeConditionRepository:
     parent: TelNowEdge\FreePBX\Base\Repository\AbstractRepository
+    arguments:
+      $timeGroupRepository: '@TelNowEdge\Module\tnetc\Repository\TimeGroupRepository'
+      $calendarHelper: '@TelNowEdge\Module\tnetc\Helper\CalendarHelper'
     autowire: true
     autoconfigure: false
     public: true
