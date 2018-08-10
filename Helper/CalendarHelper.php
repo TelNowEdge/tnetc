@@ -52,4 +52,15 @@ class CalendarHelper
                 return 'local' === $x->getType();
             });
     }
+
+    public function getById($id)
+    {
+        return $this
+            ->getCollection()
+            ->filter(function ($x) use ($id) {
+                return $id === $x->getId();
+            })
+            ->first()
+            ;
+    }
 }
