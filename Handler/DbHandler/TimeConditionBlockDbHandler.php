@@ -97,7 +97,7 @@ UPDATE
             new TimeConditionBlockEvent($timeConditionBlock)
         );
 
-        /* $stmt->execute(); */
+        $stmt->execute();
 
         $this->eventDispatcher->dispatch(
             TimeConditionBlockEvent::UPDATE_POST_SAVE,

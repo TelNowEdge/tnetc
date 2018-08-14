@@ -20,6 +20,7 @@ namespace TelNowEdge\Module\tnetc\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use TelNowEdge\FreePBX\Base\Form\Model\Destination;
+use TelNowEdge\Module\tnetc\Helper\CollectionHelper;
 
 class TimeConditionBlock
 {
@@ -156,9 +157,15 @@ class TimeConditionBlock
 
     public function addTimeConditionBlockTg(TimeConditionBlockTg $timeConditionBlockTg)
     {
-        if (true === $this->timeConditionBlockTgs->exists(function ($key, $object) use ($timeConditionBlockTg) {
-            return $object->getId() === $timeConditionBlockTg->getId();
-        }) || null === $timeConditionBlockTg->getId()) {
+        if (null === $timeConditionBlockTg->getTimeGroup()) {
+            return $this;
+        }
+
+        if (true === $this->timeConditionBlockTgs->exists(
+            function ($key, $object) use ($timeConditionBlockTg) {
+                return $object->getId() === $timeConditionBlockTg->getId();
+            }) && null !== $timeConditionBlockTg->getId()
+        ) {
             return $this;
         }
 
@@ -166,12 +173,24 @@ class TimeConditionBlock
 
         $this->timeConditionBlockTgs->add($timeConditionBlockTg);
 
+        CollectionHelper::create()
+            ->addedItem(
+                sprintf('tg%d', $this->id),
+                $timeConditionBlockTg
+            );
+
         return $this;
     }
 
     public function removeTimeConditionBlockTg(TimeConditionBlockTg $timeConditionBlockTg)
     {
         $this->timeConditionBlockTgs->removeElement($timeConditionBlockTg);
+
+        CollectionHelper::create()
+            ->removedItem(
+                sprintf('tg%d', $this->id),
+                $timeConditionBlockTg
+            );
 
         return $this;
     }
@@ -192,9 +211,15 @@ class TimeConditionBlock
 
     public function addTimeConditionBlockCalendar(TimeConditionBlockCalendar $timeConditionBlockCalendar)
     {
-        if (true === $this->timeConditionBlockCalendars->exists(function ($key, $object) use ($timeConditionBlockCalendar) {
-            return $object->getId() === $timeConditionBlockCalendar->getId();
-        }) || null === $timeConditionBlockCalendar->getId()) {
+        if (null === $timeConditionBlockCalendar->getCalendar()) {
+            return $this;
+        }
+
+        if (true === $this->timeConditionBlockCalendars->exists(
+            function ($key, $object) use ($timeConditionBlockCalendar) {
+                return $object->getId() === $timeConditionBlockCalendar->getId();
+            }) && null !== $timeConditionBlockCalendar->getId()
+        ) {
             return $this;
         }
 
@@ -202,12 +227,24 @@ class TimeConditionBlock
 
         $this->timeConditionBlockCalendars->add($timeConditionBlockCalendar);
 
+        CollectionHelper::create()
+            ->addedItem(
+                sprintf('calendar%d', $this->id),
+                $timeConditionBlockCalendar
+            );
+
         return $this;
     }
 
     public function removeTimeConditionBlockCalendar(TimeConditionBlockCalendar $timeConditionBlockCalendar)
     {
         $this->timeConditionBlockCalendars->removeElement($timeConditionBlockCalendar);
+
+        CollectionHelper::create()
+            ->removedItem(
+                sprintf('calendar%d', $this->id),
+                $timeConditionBlockCalendar
+            );
 
         return $this;
     }
@@ -228,9 +265,15 @@ class TimeConditionBlock
 
     public function addTimeConditionBlockHint(TimeConditionBlockHint $timeConditionBlockHint)
     {
-        if (true === $this->timeConditionBlockHints->exists(function ($key, $object) use ($timeConditionBlockHint) {
-            return $object->getId() === $timeConditionBlockHint->getId();
-        }) || null === $timeConditionBlockHint->getId()) {
+        if (null === $timeConditionBlockHint->getType()) {
+            return $this;
+        }
+
+        if (true === $this->timeConditionBlockHints->exists(
+            function ($key, $object) use ($timeConditionBlockHint) {
+                return $object->getId() === $timeConditionBlockHint->getId();
+            }) && null !== $timeConditionBlockHint->getId()
+        ) {
             return $this;
         }
 
@@ -238,12 +281,24 @@ class TimeConditionBlock
 
         $this->timeConditionBlockHints->add($timeConditionBlockHint);
 
+        CollectionHelper::create()
+            ->addedItem(
+                sprintf('hint%d', $this->id),
+                $timeConditionBlockHint
+            );
+
         return $this;
     }
 
     public function removeTimeConditionBlockHint(TimeConditionBlockHint $timeConditionBlockHint)
     {
         $this->timeConditionBlockHints->removeElement($timeConditionBlockHint);
+
+        CollectionHelper::create()
+            ->removedItem(
+                sprintf('hint%d', $this->id),
+                $timeConditionBlockHint
+            );
 
         return $this;
     }

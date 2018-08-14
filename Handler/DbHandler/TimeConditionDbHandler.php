@@ -98,7 +98,7 @@ UPDATE
         $stmt->bindParam('id', $timeCondition->getId());
         $stmt->bindParam('name', $timeCondition->getName());
         $stmt->bindParam('internalDial', $timeCondition->getInternalDial());
-        $stmt->bindParam('daynight', $timeCondition->getDayNight()->getId());
+        $stmt->bindParam('daynight', $timeCondition->getDayNight()->getExt());
         $stmt->bindParam('timezone', $timeCondition->getTimezone());
         $stmt->bindParam('fallback', $timeCondition->getFallback()->getDestination());
 

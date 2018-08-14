@@ -92,7 +92,7 @@ UPDATE
             new TimeConditionBlockTgEvent($timeConditionBlockTg)
         );
 
-        /* $stmt->execute(); */
+        $stmt->execute();
 
         $this->eventDispatcher->dispatch(
             TimeConditionBlockTgEvent::UPDATE_POST_SAVE,

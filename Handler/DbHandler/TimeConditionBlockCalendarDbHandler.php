@@ -97,7 +97,7 @@ UPDATE
             new TimeConditionBlockCalendarEvent($timeConditionBlockCalendar)
         );
 
-        /* $stmt->execute(); */
+        $stmt->execute();
 
         $this->eventDispatcher->dispatch(
             TimeConditionBlockCalendarEvent::UPDATE_POST_SAVE,

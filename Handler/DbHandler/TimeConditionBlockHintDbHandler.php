@@ -92,7 +92,7 @@ UPDATE
             new TimeConditionBlockHintEvent($timeConditionBlockHint)
         );
 
-        /* $stmt->execute(); */
+        $stmt->execute();
 
         $this->eventDispatcher->dispatch(
             TimeConditionBlockHintEvent::UPDATE_POST_SAVE,

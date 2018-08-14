@@ -20,6 +20,7 @@ namespace TelNowEdge\Module\tnetc\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use TelNowEdge\FreePBX\Base\Form\Model\Destination;
+use TelNowEdge\Module\tnetc\Helper\CollectionHelper;
 
 class TimeCondition
 {
@@ -173,7 +174,9 @@ class TimeCondition
 
     public function addTimeConditionBlock(TimeConditionBlock $timeConditionBlock)
     {
-        if (null !== $object = $this->timeConditionBlocks->get($timeConditionBlock->getId())) {
+        if (null !== ($object = $this->timeConditionBlocks->get($timeConditionBlock->getId()))
+            && null !== $timeConditionBlock->getId()
+        ) {
             false === $timeConditionBlock->getTimeConditionBlockTgs()->isEmpty()
                 ? $object->addTimeConditionBlockTg($timeConditionBlock->getTimeConditionBlockTgs()->first())
                 : '';
@@ -191,7 +194,13 @@ class TimeCondition
 
         $timeConditionBlock->setTimeCondition($this);
 
-        $this->timeConditionBlocks->set($timeConditionBlock->getId(), $timeConditionBlock);
+        $key = null === $timeConditionBlock->getId() ? uniqid() : $timeConditionBlock->getId();
+
+        $this->timeConditionBlocks->set($key, $timeConditionBlock);
+
+        CollectionHelper::create()
+            ->addedItem('block', $timeConditionBlock)
+            ;
 
         return $this;
     }
@@ -199,6 +208,10 @@ class TimeCondition
     public function removeTimeConditionBlock(TimeConditionBlock $timeConditionBlock)
     {
         $this->timeConditionBlocks->removeElement($timeConditionBlock);
+
+        CollectionHelper::create()
+            ->removedItem('block', $timeConditionBlock)
+            ;
 
         return $this;
     }

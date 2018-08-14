@@ -23,6 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use TelNowEdge\Module\tnetc\Event\TimeConditionEvent;
 use TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionBlockDbHandler;
+use TelNowEdge\Module\tnetc\Helper\CollectionHelper;
 
 class TimeConditionSubscriber implements EventSubscriberInterface, ContainerAwareInterface
 {
@@ -35,12 +36,15 @@ class TimeConditionSubscriber implements EventSubscriberInterface, ContainerAwar
     {
         return array(
             TimeConditionEvent::CREATE_POST_SAVE => array(
-                array('processChildren', 1000),
+                array('createBlock', 1000),
+            ),
+            TimeConditionEvent::UPDATE_POST_SAVE => array(
+                array('updateBlock', 1000),
             ),
         );
     }
 
-    public function processChildren(TimeConditionEvent $event)
+    public function createBlock(TimeConditionEvent $event)
     {
         $timeCondition = $event->getTimeCondition();
 
@@ -50,6 +54,44 @@ class TimeConditionSubscriber implements EventSubscriberInterface, ContainerAwar
             $this->container
                 ->get(TimeConditionBlockDbHandler::class)
                 ->create($block)
+                ;
+        }
+    }
+
+    public function updateBlock(TimeConditionEvent $event)
+    {
+        $timeCondition = $event->getTimeCondition();
+        $collectionHelper = CollectionHelper::create();
+        $blocks = $collectionHelper->getByName('block');
+        $updated = $collectionHelper->compileUpdated(
+            'block',
+            $timeCondition->getTimeConditionBlocks()
+        );
+
+        foreach ($updated as $block) {
+            $this->container
+                ->get(TimeConditionBlockDbHandler::class)
+                ->update($block)
+                ;
+        }
+
+        foreach ($blocks->get('added') as $block) {
+            if (null === $block->getWeight()) {
+                continue; // Object new create a empty useless object
+            }
+
+            $block->setTimeCondition($timeCondition);
+
+            $this->container
+                ->get(TimeConditionBlockDbHandler::class)
+                ->create($block)
+                ;
+        }
+
+        foreach ($blocks->get('removed') as $block) {
+            $this->container
+                ->get(TimeConditionBlockDbHandler::class)
+                ->delete($block)
                 ;
         }
     }
