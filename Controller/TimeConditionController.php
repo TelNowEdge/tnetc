@@ -22,6 +22,7 @@ use TelNowEdge\FreePBX\Base\Controller\AbstractController;
 use TelNowEdge\Module\tnetc\Form\TimeConditionType;
 use TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionDbHandler;
 use TelNowEdge\Module\tnetc\Model\TimeCondition;
+use TelNowEdge\Module\tnetc\Repository\TimeConditionRepository;
 
 class TimeConditionController extends AbstractController
 {
@@ -48,12 +49,45 @@ class TimeConditionController extends AbstractController
                  ->create($form->getData())
                 ;
 
-            /* redirect( */
-            /*     sprintf('config.php?display=fagi&id=%d', $form->getData()->getId()) */
-            /* ); */
+            redirect(
+                sprintf('config.php?display=tnetc&id=%d', $form->getData()->getId())
+            );
         }
 
         return $this->processForm($form);
+    }
+
+    public function editAction($id)
+    {
+        $request = $this->get('request');
+
+        try {
+            $timeCondition = $this
+                ->get(TimeConditionRepository::class)
+                ->getById($id)
+                ;
+        } catch (NoResultException $e) {
+            return;
+        }
+
+        $form = $this->createForm(
+            TimeConditionType::class,
+            $timeCondition
+        );
+        xdebug_break();
+        $form->handleRequest($request);
+
+        if (true === $form->isValid()) {
+            needreload();
+
+            $this->get(TimeConditionDbHandler::class)
+                 ->update($timeCondition)
+                ;
+        }
+
+        $usedBy = framework_check_destination_usage(sprintf('timeCondition,%d,1', $timeCondition->getId()));
+
+        return $this->processForm($form, $id, $usedBy);
     }
 
     public static function getViewsDir()
