@@ -90,7 +90,7 @@ SELECT
 
     public function getById($id)
     {
-        $sql = sprintf('%s WHERE tc.id = :id', self::SQL);
+        $sql = sprintf('%s WHERE tc.id = :id ORDER BY tc.id, tcb.weight ASC', self::SQL);
 
         $stmt = $this->connection->prepare($sql);
         $stmt->bindParam('id', $id);
@@ -160,6 +160,10 @@ SELECT
     {
         foreach ($tc->getTimeConditionBlocks() as $block) {
             foreach ($block->getTimeConditionBlockTgs() as $x) {
+                if (null === $x->getId()) {
+                    continue;
+                }
+
                 $res = $this->timeGroupRepository
                     ->getById($x->getTimeGroup())
                     ;
@@ -168,6 +172,10 @@ SELECT
             }
 
             foreach ($block->getTimeConditionBlockCalendars() as $x) {
+                if (null === $x->getId()) {
+                    continue;
+                }
+
                 $res = $this->calendarHelper
                     ->getById($x->getCalendar())
                     ;
