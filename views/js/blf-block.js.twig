@@ -2,9 +2,9 @@
  $(document).ready(() => {
    $(document)
      .on('tnetc::if-block::add', (e) => {
-       process('data-child-hint', 'timeConditionBlockHints');
+       process('data-child-hint', 'timeConditionBlockHints', '__child__');
      });
 
-   process('data-child-hint', 'timeConditionBlockHints');
+   process('data-child-hint', 'timeConditionBlockHints', '__child__');
  })
 </script>

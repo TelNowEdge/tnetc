@@ -39,13 +39,14 @@ class TimeConditionType extends AbstractType
                 'repository' => DayNightRepository::class,
                 'caller' => 'getCollection',
                 'choice_label' => function ($x) {
-                    return sprintf('[%d] %s', $x->getExt(), $x->getFcDescription());
+                    return sprintf('(%d) %s', $x->getExt(), $x->getFcDescription());
                 },
                 'choice_value' => function ($x) {
                     return $x->getExt();
                 },
                 'placeholder' => '-',
                 'required' => false,
+                'label' => 'Call flow control',
             ))
             ->add('timezone', TimezoneType::class, array(
                 'preferred_choices' => array('Europe/Paris'),
@@ -62,7 +63,7 @@ class TimeConditionType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,
-                'by_reference' => true,
+                'by_reference' => false,
             ))
             ->add('fallback', DestinationType::class, array(
                 'required' => true,

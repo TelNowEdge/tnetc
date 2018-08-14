@@ -44,7 +44,8 @@ class TimeConditionBlockType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,
-                'by_reference' => true,
+                'prototype_name' => '__child__',
+                'by_reference' => false,
             ))
             ->add('timeConditionBlockCalendars', CollectionType::class, array(
                 'label' => 'Calendar',
@@ -58,7 +59,8 @@ class TimeConditionBlockType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,
-                'by_reference' => true,
+                'prototype_name' => '__child__',
+                'by_reference' => false,
             ))
             ->add('timeConditionBlockHints', CollectionType::class, array(
                 'label' => 'BLF',
@@ -72,7 +74,8 @@ class TimeConditionBlockType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,
-                'by_reference' => true,
+                'prototype_name' => '__child__',
+                'by_reference' => false,
             ))
             ->add('goto', DestinationType::class, array(
                 'required' => true,

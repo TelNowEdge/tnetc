@@ -2,9 +2,9 @@
  $(document).ready(() => {
    $(document)
      .on('tnetc::if-block::add', (e) => {
-       process('data-child-calendar', 'timeConditionBlockCalendars');
+       process('data-child-calendar', 'timeConditionBlockCalendars', '__child__');
      });
 
-   process('data-child-calendar', 'timeConditionBlockCalendars');
+   process('data-child-calendar', 'timeConditionBlockCalendars', '__child__');
  })
 </script>

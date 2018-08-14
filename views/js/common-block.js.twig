@@ -1,8 +1,9 @@
 <script type="text/javascript">
- const addBlock = (elem, maxId) => {
+ const addBlock = (elem, maxId, prototypeName) => {
+   const regExp = new RegExp(prototypeName, 'g');
    let prototype = $(elem)
      .data('prototype')
-     .replace(/__name__/g, maxId)
+     .replace(regExp, maxId)
    ;
 
    $(elem)
@@ -65,7 +66,7 @@
    elem.remove();
  }
 
- const process = (dataName, blockName) => {
+ const process = (dataName, blockName, prototypeName) => {
    addDeleteButton(dataName);
 
    $('div[data-child]')
@@ -117,7 +118,7 @@
                })
              ).on('click', () => {
                maxId++
-               addBlock(`#time_condition_timeConditionBlocks_${parentId}_${blockName}`, maxId);
+               addBlock(`#time_condition_timeConditionBlocks_${parentId}_${blockName}`, maxId, prototypeName);
                addDeleteButton(dataName);
              })
            )

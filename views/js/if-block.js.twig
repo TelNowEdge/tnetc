@@ -14,6 +14,10 @@
        $(x).attr('name', $(x).attr('name').replace(/\[\d+\]/, `[${i}]`));
      });
 
+   bindAction(i);
+ }
+
+ const bindAction = (i) => {
    $(`#time_condition_timeConditionBlocks_${i}_weight`)
      .val(i)
    ;
@@ -40,12 +44,12 @@
    addDeleteButton('data-child');
 
    $('#time_condition_timeConditionBlocks')
-     .children('.element-container')
+     .find('div[data-child]')
      .each((i, x) => {
        /* processForm is an helper defined by freepbx-base */
        processForm(
-         `#time_condition_timeConditionBlocks_${i}_goto_Category`,
-         `#time_condition_timeConditionBlocks_${i}_goto_Destination`
+         `#${$(x).attr('id')}_goto_Category`,
+         `#${$(x).attr('id')}_goto_Destination`
        );
      });
 
@@ -83,9 +87,9 @@
          })
        ).on('click', (e) => {
          maxId++
-         addBlock('#time_condition_timeConditionBlocks', maxId);
+         addBlock('#time_condition_timeConditionBlocks', maxId, '__name__');
          addDeleteButton('data-child');
-         sortableDone();
+         bindAction(maxId);
 
          $(document).trigger('tnetc::if-block::add');
        })

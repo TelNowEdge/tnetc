@@ -2,9 +2,9 @@
  $(document).ready(() => {
    $(document)
      .on('tnetc::if-block::add', (e) => {
-       process('data-child-tg', 'timeConditionBlockTgs');
+       process('data-child-tg', 'timeConditionBlockTgs', '__child__');
      });
 
-   process('data-child-tg', 'timeConditionBlockTgs');
+   process('data-child-tg', 'timeConditionBlockTgs', '__child__');
  })
 </script>
