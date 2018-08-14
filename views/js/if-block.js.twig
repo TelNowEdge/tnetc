@@ -8,7 +8,7 @@
 
  const reOrder = (i, e) => {
    $(e)
-     .find('.form-control')
+     .find('.form-control, input[type="hidden"]')
      .each((j, x) => {
        $(x).attr('id', $(x).attr('id').replace(/_\d+_/, `_${i}_`));
        $(x).attr('name', $(x).attr('name').replace(/\[\d+\]/, `[${i}]`));
