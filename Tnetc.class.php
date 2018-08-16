@@ -20,6 +20,7 @@ namespace FreePBX\modules;
 
 use TelNowEdge\FreePBX\Base\Module\Module;
 use TelNowEdge\Module\tnetc\Controller\AjaxController;
+use TelNowEdge\Module\tnetc\Controller\FunctionController;
 use TelNowEdge\Module\tnetc\Controller\PageController;
 use TelNowEdge\Module\tnetc\Controller\TimeConditionController;
 use TelNowEdge\Module\tnetc\Resources\Migrations\TimeConditionMigration;
@@ -173,5 +174,23 @@ class Tnetc extends Module implements \BMO
             ->get(PageController::class)
             ->showAction()
             ;
+    }
+
+    /**
+     * This function are called by FreePBX hook ; Please watch function.inc.php.
+     */
+    public function getDestinations()
+    {
+        return $this->get(FunctionController::class)->getDestinations();
+    }
+
+    public function getDestinationInfo($dest)
+    {
+        return $this->get(FunctionController::class)->getDestinationInfo($dest);
+    }
+
+    public function checkDestinations($dest)
+    {
+        return $this->get(FunctionController::class)->checkDestinations($dest);
     }
 }

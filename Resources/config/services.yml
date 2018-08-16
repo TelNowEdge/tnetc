@@ -5,3 +5,7 @@ services:
     public: true
 
   TelNowEdge\Module\tnetc\Helper\CalendarHelper: ~
+
+  TelNowEdge\Module\tnetc\Manager\DestinationManager:
+    arguments:
+      - '@TelNowEdge\Module\tnetc\Repository\TimeConditionRepository'

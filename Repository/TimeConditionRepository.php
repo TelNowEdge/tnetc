@@ -104,6 +104,45 @@ SELECT
             ;
     }
 
+    public function getByGotos($gotos)
+    {
+        $params = array();
+        foreach ($gotos as $k => $goto) {
+            array_push($params, sprintf(':p_%d', $k));
+        }
+
+        $sql = sprintf('%s WHERE tcb.goto IN (%s)', self::SQL, implode(',', $params));
+
+        $stmt = $this->connection->prepare($sql);
+
+        foreach ($gotos as $k => $goto) {
+            $stmt->bindValue(sprintf('p_%d', $k), $goto);
+        }
+
+        $stmt->execute();
+
+        $res = $this->fetchAll($stmt);
+
+        return $this
+            ->collection($res)
+            ;
+    }
+
+    public function getByFallBack($fallback)
+    {
+        $sql = sprintf('%s WHERE tc.fallback = :fallback', self::SQL);
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('fallback', $fallback);
+        $stmt->execute();
+
+        $res = $this->fetchAll($stmt);
+
+        return $this
+            ->collection($res)
+            ;
+    }
+
     private function collection(array $res)
     {
         $collection = new ArrayCollection();

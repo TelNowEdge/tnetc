@@ -27,3 +27,11 @@ services:
     public: true
     tags:
       - "telnowedge.controller"
+
+  TelNowEdge\Module\tnetc\Controller\FunctionController:
+    parent: TelNowEdge\FreePBX\Base\Controller\AbstractController
+    autowire: true
+    autoconfigure: false
+    public: true
+    tags:
+      - "telnowedge.controller"
