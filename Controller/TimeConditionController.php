@@ -74,7 +74,7 @@ class TimeConditionController extends AbstractController
             TimeConditionType::class,
             $timeCondition
         );
-        xdebug_break();
+
         $form->handleRequest($request);
 
         if (true === $form->isValid()) {
