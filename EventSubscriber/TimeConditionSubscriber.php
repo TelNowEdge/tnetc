@@ -41,6 +41,9 @@ class TimeConditionSubscriber implements EventSubscriberInterface, ContainerAwar
             TimeConditionEvent::UPDATE_POST_SAVE => array(
                 array('updateBlock', 1000),
             ),
+            TimeConditionEvent::DELETE_PRE_SAVE => array(
+                array('deleteBlock', 1000),
+            ),
         );
     }
 
@@ -89,6 +92,20 @@ class TimeConditionSubscriber implements EventSubscriberInterface, ContainerAwar
         }
 
         foreach ($blocks->get('removed') as $block) {
+            $this->container
+                ->get(TimeConditionBlockDbHandler::class)
+                ->delete($block)
+                ;
+        }
+    }
+
+    public function deleteBlock(TimeConditionEvent $event)
+    {
+        $timeCondition = $event->getTimeCondition();
+
+        foreach ($timeCondition->getTimeConditionBlocks() as $block) {
+            $block->setTimeCondition($timeCondition);
+
             $this->container
                 ->get(TimeConditionBlockDbHandler::class)
                 ->delete($block)

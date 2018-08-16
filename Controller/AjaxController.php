@@ -21,6 +21,7 @@ namespace TelNowEdge\Module\tnetc\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 use TelNowEdge\FreePBX\Base\Controller\AbstractController;
 use TelNowEdge\FreePBX\Base\Exception\NoResultException;
+use TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionDbHandler;
 use TelNowEdge\Module\tnetc\Repository\TimeConditionRepository;
 
 class AjaxController extends AbstractController
@@ -58,6 +59,32 @@ class AjaxController extends AbstractController
                 'dest' => sprintf('?display=tnetc&id=%d', $timeCondition->getId()),
             ));
         }
+    }
+
+    public function delete()
+    {
+        $request = $this->get('request');
+
+        $id = $request->request->getInt('id', 0);
+
+        if (0 >= $id) {
+            return false;
+        }
+
+        try {
+            $timeCondition = $this
+                ->get(TimeConditionRepository::class)
+                ->getById($id)
+                ;
+        } catch (NoResultException $e) {
+            return $this->get('serializer')->normalize(array('success' => false));
+        }
+
+        $this->get(TimeConditionDbHandler::class)
+             ->delete($timeCondition)
+            ;
+
+        return $this->get('serializer')->normalize(array('success' => true));
     }
 
     public static function getViewsDir()

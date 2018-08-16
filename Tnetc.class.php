@@ -62,6 +62,7 @@ class Tnetc extends Module implements \BMO
     {
         switch ($req) {
         case 'getTimeConditions':
+        case 'delete':
             return true;
         }
 
@@ -76,6 +77,8 @@ class Tnetc extends Module implements \BMO
         switch ($command) {
         case 'getTimeConditions':
             return $this->get(AjaxController::class)->getTimeConditions();
+        case 'delete':
+            return $this->get(AjaxController::class)->delete();
         }
     }
 

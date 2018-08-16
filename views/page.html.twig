@@ -26,6 +26,7 @@
         <thead>
           <tr>
             <th data-sortable="true" data-field="name">{{ 'Name' | fpbxtrans }}</th>
+            <th data-formatter="displayActionColumn" data-field="id">{{ 'Actions' | fpbxtrans }}</th>
           </tr>
         </thead>
       </table>
@@ -71,7 +72,7 @@
        }
 
        const id = $(this).data('id');
-       $.post("ajax.php", {module: 'modtnetc', command: 'deleteTnetc', id })
+       $.post("ajax.php", {module: 'tnetc', command: 'delete', id })
         .then(function (res) {
           if (res.success === false) {
             alert('Failed to delete this item');

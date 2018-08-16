@@ -90,6 +90,28 @@ class TimeConditionController extends AbstractController
         return $this->processForm($form, $id, $usedBy);
     }
 
+    public function deleteAction($id)
+    {
+        $request = $this->get('request');
+
+        try {
+            $timeCondition = $this
+                ->get(TimeConditionRepository::class)
+                ->getById($id)
+                ;
+        } catch (NoResultException $e) {
+            return;
+        }
+
+        $this->get(TimeConditionDbHandler::class)
+             ->delete($timeCondition)
+            ;
+
+        needreload();
+
+        redirect('config.php?display=tnetc');
+    }
+
     public static function getViewsDir()
     {
         return sprintf('%s/../views', __DIR__);
