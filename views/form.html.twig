@@ -43,6 +43,17 @@
 
 <script type="text/javascript">
  $(document).ready(() => {
+   $('#duplicate').on('click', () => {
+     $('<input />', {
+       name: 'duplicate',
+       value: true,
+       type: 'hidden',
+       class: 'hidden'
+     })
+       .appendTo('form.fpbx-submit')
+     ;
+   });
+
    $('.used-by > [data-toggle="popover"]').popover();
  });
 </script>

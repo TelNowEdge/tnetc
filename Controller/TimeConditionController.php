@@ -90,10 +90,60 @@ class TimeConditionController extends AbstractController
         return $this->processForm($form, $id, $usedBy);
     }
 
-    public function deleteAction($id)
+    public function duplicateAction()
     {
         $request = $this->get('request');
 
+        $form = $this->createForm(
+            TimeConditionType::class,
+            $timeCondition
+        );
+
+        $form->handleRequest($request);
+
+        if (true === $form->isValid()) {
+            needreload();
+
+            $timeCondition = $form->getData();
+
+            try {
+                $storedTimeConditions = $this
+                    ->get(TimeConditionRepository::class)
+                    ->getByNameLike($timeCondition->getName())
+                    ;
+
+                $names = array();
+                foreach ($storedTimeConditions as $storedTimeCondition) {
+                    array_push($names, $storedTimeCondition->getName());
+                }
+
+                rsort($names);
+
+                $name = reset($names);
+
+                if (0 !== preg_match('/(.+)_(.+)$/', $name, $match)) {
+                    $timeCondition->setName(sprintf('%s_%d', $match[1], (int) $match[2] + 1));
+                } else {
+                    $timeCondition->setName(sprintf('%s_1', $name));
+                }
+            } catch (NoResultException $e) {
+            }
+
+            $this
+                ->get(TimeConditionDbHandler::class)
+                ->create($timeCondition)
+                ;
+
+            redirect(
+                sprintf('config.php?display=tnetc&id=%d', $form->getData()->getId())
+            );
+        }
+
+        return $this->processForm($form, $request->request->get('id', null));
+    }
+
+    public function deleteAction($id)
+    {
         try {
             $timeCondition = $this
                 ->get(TimeConditionRepository::class)

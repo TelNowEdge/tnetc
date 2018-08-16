@@ -104,6 +104,19 @@ SELECT
             ;
     }
 
+    public function getByNameLike($name)
+    {
+        $sql = sprintf('%s WHERE tc.name LIKE :name ORDER BY tc.id, tcb.weight ASC', self::SQL);
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam('name', sprintf('%s%%', $name));
+        $stmt->execute();
+
+        $res = $this->fetchAll($stmt);
+
+        return $this->collection($res);
+    }
+
     public function getByGotos($gotos)
     {
         $params = array();
