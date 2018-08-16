@@ -40,3 +40,9 @@
 {% include '@tnetc/js/tg-block.js.twig' %}
 {% include '@tnetc/js/calendar-block.js.twig' %}
 {% include '@tnetc/js/blf-block.js.twig' %}
+
+<script type="text/javascript">
+ $(document).ready(() => {
+   $('.used-by > [data-toggle="popover"]').popover();
+ });
+</script>

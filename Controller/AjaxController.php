@@ -39,6 +39,27 @@ class AjaxController extends AbstractController
         return $this->get('serializer')->normalize($collection);
     }
 
+    public function search($query, &$results)
+    {
+        $timeConditions = $this
+            ->get(TimeConditionRepository::class)
+            ->getCollection()
+            ;
+
+        foreach ($timeConditions as $timeCondition) {
+            array_push($results, array(
+                'text' => sprintf('[Time condition] %s', $timeCondition->getName()),
+                'type' => 'get',
+                'dest' => sprintf('?display=tnetc&id=%d', $timeCondition->getId()),
+            ));
+            array_push($results, array(
+                'text' => sprintf('[Time condition][%s] %s', $timeCondition->getName(), $timeCondition->getInternalDial()),
+                'type' => 'get',
+                'dest' => sprintf('?display=tnetc&id=%d', $timeCondition->getId()),
+            ));
+        }
+    }
+
     public static function getViewsDir()
     {
         return sprintf('%s/../views', __DIR__);
