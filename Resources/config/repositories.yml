@@ -9,6 +9,7 @@ services:
     arguments:
       $timeGroupRepository: '@TelNowEdge\Module\tnetc\Repository\TimeGroupRepository'
       $calendarHelper: '@TelNowEdge\Module\tnetc\Helper\CalendarHelper'
+      $dayNightRepository: '@TelNowEdge\Module\tnetc\Repository\DayNightRepository'
     autowire: true
     autoconfigure: false
     public: true

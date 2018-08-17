@@ -54,6 +54,29 @@ SELECT
         return $collection;
     }
 
+    public function getByExt($ext)
+    {
+        $collection = new ArrayCollection();
+        $sql = sprintf('%s WHERE ext = :ext', self::SQL);
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('ext', $ext);
+        $stmt->execute();
+
+        $res = $this->fetchAll($stmt);
+
+        $unlinearize = $this->unlinearize($res);
+
+        foreach ($unlinearize as $child) {
+            $res = $this->mapModel($this->sqlToArray($child));
+            $collection->add($res);
+        }
+
+        return $collection
+            ->first()
+            ;
+    }
+
     private function unlinearize(array $res)
     {
         $tab = array();

@@ -19,6 +19,7 @@
 namespace TelNowEdge\Module\tnetc\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use TelNowEdge\FreePBX\Base\Exception\NoResultException;
 use TelNowEdge\FreePBX\Base\Form\Model\Destination;
 use TelNowEdge\FreePBX\Base\Repository\AbstractRepository;
 use TelNowEdge\Module\tnetc\Helper\CalendarHelper;
@@ -35,7 +36,7 @@ SELECT
         tc.id tc__id
         ,tc.name tc__name
         ,tc.internal_dial tc__internal_dial
-        ,tc.daynight_id tc__daynight
+        ,tc.daynight_id daynight__ext
         ,tc.timezone tc__timezone
         ,tc.fallback fallback__destination
         ,tcb.id tcb__id
@@ -68,11 +69,15 @@ SELECT
 
     private $timeGroupRepository;
 
+    private $dayNightRepository;
+
     public function __construct(
         TimeGroupRepository $timeGroupRepository,
-        CalendarHelper $calendarHelper
+        CalendarHelper $calendarHelper,
+        DayNightRepository $dayNightRepository
     ) {
         $this->calendarHelper = $calendarHelper;
+        $this->dayNightRepository = $dayNightRepository;
         $this->timeGroupRepository = $timeGroupRepository;
     }
 
@@ -203,7 +208,10 @@ SELECT
             ->setTimeConditionBlocks(array($tcb))
             ;
 
-        $this->fakeJoin($tc);
+        $this
+            ->fakeJoin($tc)
+            ->dayNightJoin($tc, $res['daynight']['ext'])
+            ;
 
         return $tc;
     }
@@ -235,5 +243,26 @@ SELECT
                 $x->setCalendar($res);
             }
         }
+
+        return $this;
+    }
+
+    private function dayNightJoin(TimeCondition $timeCondition, $ext)
+    {
+        if (null === $ext) {
+            return $this;
+        }
+
+        try {
+            $dayNight = $this->dayNightRepository
+                ->getByExt($ext)
+                ;
+        } catch (NoResultException $e) {
+            return $this;
+        }
+
+        $timeCondition->setDayNight($dayNight);
+
+        return $this;
     }
 }
