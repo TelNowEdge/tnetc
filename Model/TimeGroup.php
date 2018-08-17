@@ -18,11 +18,20 @@
 
 namespace TelNowEdge\Module\tnetc\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class TimeGroup
 {
     protected $id;
 
     protected $description;
+
+    protected $times;
+
+    public function __construct()
+    {
+        $this->times = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -44,6 +53,25 @@ class TimeGroup
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getTimes()
+    {
+        return $this->times;
+    }
+
+    public function setTimes(array $times)
+    {
+        $this->times = new ArrayCollection($times);
+
+        return $this;
+    }
+
+    public function addTime($time)
+    {
+        $this->times->add($time);
 
         return $this;
     }

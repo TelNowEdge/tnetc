@@ -28,8 +28,12 @@ class TimeGroupRepository extends AbstractRepository
 SELECT
         tg.id tg__id
         ,tg.description tg__description
+        ,tgd.time map_local__time
     FROM
-        timegroups_groups tg
+        timegroups_groups tg INNER JOIN timegroups_details tgd
+            ON (
+            tgd.timegroupid = tg.id
+        )
 ';
 
     public function getCollection()
@@ -64,6 +68,12 @@ SELECT
 
         foreach ($res as $child) {
             $object = $this->mapModel($this->sqlToArray($child));
+
+            if ($x = $collection->get($object->getId())) {
+                $x->addTime($object->getTimes()->first());
+                continue;
+            }
+
             $collection->set($object->getId(), $object);
         }
 
@@ -75,6 +85,9 @@ SELECT
 
     private function mapModel(array $res)
     {
-        return $this->objectFromArray(TimeGroup::class, $res['tg']);
+        $timeGroup = $this->objectFromArray(TimeGroup::class, $res['tg']);
+        $timeGroup->addTime($res['map_local']['time']);
+
+        return $timeGroup;
     }
 }
