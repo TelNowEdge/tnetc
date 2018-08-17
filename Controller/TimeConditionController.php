@@ -85,7 +85,7 @@ class TimeConditionController extends AbstractController
                 ;
         }
 
-        $usedBy = framework_check_destination_usage(sprintf('timeCondition,%d,1', $timeCondition->getId()));
+        $usedBy = framework_check_destination_usage(sprintf('time-condition-tne,%d,1', $timeCondition->getId()));
 
         return $this->processForm($form, $id, $usedBy);
     }
