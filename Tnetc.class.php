@@ -20,6 +20,7 @@ namespace FreePBX\modules;
 
 use TelNowEdge\FreePBX\Base\Module\Module;
 use TelNowEdge\Module\tnetc\Controller\AjaxController;
+use TelNowEdge\Module\tnetc\Controller\DialplanController;
 use TelNowEdge\Module\tnetc\Controller\FunctionController;
 use TelNowEdge\Module\tnetc\Controller\PageController;
 use TelNowEdge\Module\tnetc\Controller\TimeConditionController;
@@ -80,6 +81,19 @@ class Tnetc extends Module implements \BMO
         case 'delete':
             return $this->get(AjaxController::class)->delete();
         }
+    }
+
+    public static function myDialplanHooks()
+    {
+        return true;
+    }
+
+    public function doDialplanHook(&$ext, $engine, $priority)
+    {
+        $this
+            ->get(DialplanController::class)
+            ->run($ext, $engine, $priority)
+            ;
     }
 
     public function getActionBar()

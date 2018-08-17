@@ -9,3 +9,9 @@ services:
   TelNowEdge\Module\tnetc\Manager\DestinationManager:
     arguments:
       - '@TelNowEdge\Module\tnetc\Repository\TimeConditionRepository'
+
+  TelNowEdge\Module\tnetc\DialPlan\Generator\TimeConditionGenerator:
+    parent: TelNowEdge\FreePBX\Base\DialPlan\Generator\AbstractGenerator
+    autowire: true
+    autoconfigure: false
+    public: true

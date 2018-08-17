@@ -38,7 +38,7 @@ class FunctionController extends AbstractController
 
         return array_map(function ($x) {
             return array(
-                'destination' => sprintf('timeCondition,%d,1', $x->getId()),
+                'destination' => sprintf('time-condition-tne,%d,1', $x->getId()),
                 'description' => $x->getName(),
             );
         }, $timeConditions->toArray());
@@ -46,7 +46,7 @@ class FunctionController extends AbstractController
 
     public function getDestinationInfo($dest)
     {
-        if (0 === preg_match('/^timeCondition,([^,]+),/', $dest, $match)) {
+        if (0 === preg_match('/^time-condition-tne,([^,]+),/', $dest, $match)) {
             return false;
         }
 
