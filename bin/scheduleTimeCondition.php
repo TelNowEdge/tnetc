@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+use TelNowEdge\FreePBX\Base\Manager\AmpConfManager;
 use TelNowEdge\FreePBX\Base\Manager\DevStateManager;
 use TelNowEdge\Module\tnetc\Repository\TimeConditionRepository;
 
@@ -31,25 +32,24 @@ $timeConditions = $container
     ->getCollection()
     ;
 
+$defaultState = $container
+    ->get(AmpConfManager::class)
+    ->get('TNE_TC_DEFAULT_HINT')
+    ;
+
+$devStateManager = $container->get(DevStateManager::class);
+
 foreach ($timeConditions as $timeCondition) {
+    $fallback = true;
+
     foreach ($timeCondition->getTimeConditionBlocks() as $block) {
         if (true === $block->getTimeConditionBlockHints()->isEmpty()) {
-            continue;
+            $state = convertHint($defaultState);
+        } else {
+            $state = convertHint($block->getTimeConditionBlockHints()->first()->getType());
         }
 
         $hint = sprintf('TCTNE%d', $timeCondition->getId());
-
-        switch ($block->getTimeConditionBlockHints()->first()->getType()) {
-        case 'green':
-            $state = 'NOT_INUSE';
-            break;
-        case 'red':
-            $state = 'INUSE';
-            break;
-        case 'blink':
-            $state = 'RINGING';
-            break;
-        }
 
         foreach ($block->getTimeConditionBlockTgs() as $tg) {
             foreach ($tg->getTimeGroup()->getTimes() as $time) {
@@ -63,25 +63,42 @@ foreach ($timeConditions as $timeCondition) {
                     continue;
                 }
 
-                $container
-                    ->get(DevStateManager::class)
-                    ->update($hint, $state)
-                    ;
+                $devStateManager->update($hint, $state);
+                $fallback = false;
             }
         }
 
         foreach ($block->getTimeConditionBlockCalendars() as $calendar) {
             $timeMatch = FreePBX::Calendar()->matchCalendar($calendar->getCalendar()->getId());
             $next = FreePBX::Calendar()->getNextEvent($calendar->getCalendar()->getId(), $timeCondition->getTimezone());
-            $devStateManager = $container->get(DevStateManager::class);
 
             if (false === $timeMatch && 'inverse' === $calendar->getPolicy()) {
                 $devStateManager->update($hint, $state);
+                $fallback = false;
             }
 
             if (true === $timeMatch && 'straight' === $calendar->getPolicy()) {
                 $devStateManager->update($hint, $state);
+                $fallback = false;
             }
         }
+    }
+
+    if (false === $fallback) {
+        continue;
+    }
+
+    $devStateManager->update($hint, convertHint($defaultState));
+}
+
+function convertHint($hint)
+{
+    switch ($hint) {
+    case 'green':
+        return 'NOT_INUSE';
+    case 'red':
+        return 'INUSE';
+    case 'blink':
+        return 'RINGING';
     }
 }

@@ -261,6 +261,27 @@ class TimeConditionGenerator extends AbstractGenerator
 
     private function processFallback(Timecondition $timeCondition, $ext, $context)
     {
+        $devState = $this->container
+            ->get(AmpConfManager::class)
+            ->get('AST_FUNC_DEVICE_STATE')
+            ;
+
+        $defaultState = $this->container
+            ->get(AmpConfManager::class)
+            ->get('TNE_TC_DEFAULT_HINT')
+            ;
+
+        $ext->add(
+            $context,
+            $timeCondition->getId(),
+            false,
+            new \ext_set(sprintf(
+                '%s(Custom:TCTNE%d)',
+                $devState,
+                $timeCondition->getId()
+            ), $this->convertHint($defaultState))
+        );
+
         $ext->add(
             $context,
             $timeCondition->getId(),
