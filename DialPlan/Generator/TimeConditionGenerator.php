@@ -57,6 +57,16 @@ class TimeConditionGenerator extends AbstractGenerator
                 $context,
                 $timeCondition->getId(),
                 false,
+                new Verb\Verbose(2, sprintf(
+                    'TIMENOW: ${STRFTIME(${EPOCH},%1$s,%%H:%%M,%%a,%%e,%%b)}, %1$s',
+                    $timeCondition->getTimezone()
+                ))
+            );
+
+            $ext->add(
+                $context,
+                $timeCondition->getId(),
+                false,
                 new Verb\Verbose(2, sprintf('Tme time condition: %d', $timeCondition->getId()))
             );
 
@@ -69,13 +79,6 @@ class TimeConditionGenerator extends AbstractGenerator
             }
 
             $this->processFallback($timeCondition, $ext, $context);
-
-            $ext->add(
-                $context,
-                'h',
-                false,
-                new \ext_goto(1, 'hangup', 'app-blackhole')
-            );
         }
     }
 
@@ -156,16 +159,6 @@ class TimeConditionGenerator extends AbstractGenerator
     private function processTimeGroups(Timecondition $timeCondition, TimeConditionBlock $block, $ext, $context)
     {
         foreach ($block->getTimeConditionBlockTgs() as $timeGroup) {
-            $ext->add(
-                $context,
-                $timeCondition->getId(),
-                false,
-                new Verb\Verbose(2, sprintf(
-                    'TIMENOW: ${STRFTIME(${EPOCH},%1$s,%%H:%%M,%%a,%%e,%%b)}, %1$s',
-                    $timeCondition->getTimezone()
-                ))
-            );
-
             foreach ($timeGroup->getTimeGroup()->getTimes() as $time) {
                 $ext->add(
                     $context,
