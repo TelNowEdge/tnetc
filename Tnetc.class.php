@@ -24,16 +24,24 @@ use TelNowEdge\Module\tnetc\Controller\DialplanController;
 use TelNowEdge\Module\tnetc\Controller\FunctionController;
 use TelNowEdge\Module\tnetc\Controller\PageController;
 use TelNowEdge\Module\tnetc\Controller\TimeConditionController;
+use TelNowEdge\Module\tnetc\Resources\Migrations\PhpMigration;
 use TelNowEdge\Module\tnetc\Resources\Migrations\TimeConditionMigration;
 
 class Tnetc extends Module implements \BMO
 {
+    public static function getMigrations()
+    {
+        return array(
+            TimeConditionMigration::class,
+            PhpMigration::class,
+        );
+    }
+
     public function install()
     {
-        $this
-            ->get(TimeConditionMigration::class)
-            ->migrate()
-            ;
+        return array_reduce(self::getMigrations(), function ($aggregation, $x) {
+            return $aggregation && $this->get($x)->migrate();
+        }, true);
     }
 
     public function uninstall()

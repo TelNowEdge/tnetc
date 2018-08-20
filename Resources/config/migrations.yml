@@ -9,3 +9,9 @@ services:
     autowire: true
     autoconfigure: false
     public: true
+
+  TelNowEdge\Module\tnetc\Resources\Migrations\PhpMigration:
+    parent: TelNowEdge\FreePBX\Base\Resources\Migrations\AbstractSqlMigration
+    autowire: true
+    autoconfigure: false
+    public: true
