@@ -32,22 +32,64 @@ class DialplanController extends AbstractController
 
     public function addCron()
     {
-        $libDir = $this
-            ->get(AmpConfManager::class)
-            ->get('ASTVARLIBDIR')
-            ;
-
         foreach (\FreePBX::Cron()->getAll() as $cron) {
             if (preg_match('/scheduleTimeCondition.php/', $cron)) {
                 \FreePBX::Cron()->remove($cron);
             }
         }
 
+        $cronEnabled = $this
+            ->get(AmpConfManager::class)
+            ->get('TCMAINT')
+            ;
+
+        if (0 === (int) $cronEnabled) {
+            return;
+        }
+
+        $interval = $this
+            ->get(AmpConfManager::class)
+            ->get('TCINTERVAL')
+            ;
+
+        switch ($interval) {
+        case '60':
+            $timing = '* * * * *';
+            break;
+        case '120':
+            $timing = '*/2 * * * *';
+            break;
+        case '180':
+            $timing = '*/3 * * * *';
+            break;
+        case '240':
+            $timing = '*/4 * * * *';
+            break;
+        case '300':
+            $timing = '*/5 * * * *';
+            break;
+        case '600':
+            $timing = '*/10 * * * *';
+            break;
+        case '900':
+            $timing = '*/15 * * * *';
+            break;
+        default:
+            $timing = '* * * * *';
+            break;
+        }
+
+        $libDir = $this
+            ->get(AmpConfManager::class)
+            ->get('ASTVARLIBDIR')
+            ;
+
         $line = sprintf(
-            '* * * * * [ -x %1$s/bin/scheduleTimeCondition.php ] && %1$s/bin/scheduleTimeCondition.php',
+            '%1$s [ -x %2$s/bin/scheduleTimeCondition.php ] && %2$s/bin/scheduleTimeCondition.php',
+            $timing,
             $libDir
         );
-        xdebug_break();
+
         \FreePBX::Cron()->add($line);
     }
 
