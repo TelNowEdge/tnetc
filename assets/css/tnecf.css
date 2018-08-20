@@ -5,9 +5,18 @@
 
 #time_condition_timeConditionBlocks > .element-container {
     cursor: move;
-    border: 2px solid grey;
+    border: 2px solid #B0BEC5;
+    padding: 10px;
 }
 
 #time_condition_timeConditionBlocks > .element-container:not(:nth-child(0n+1)) {
     margin-top: 10px;
+    background-color: white;
+}
+
+.nav-anchor {
+    position: absolute;
+    top: 0;
+    left: -90px;
+    cursor: default !important;
 }

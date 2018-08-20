@@ -7,6 +7,8 @@
  }
 
  const reOrder = (i, e) => {
+   addAnchor('data-child');
+
    $(e)
      .find('.form-control, input[type="hidden"]')
      .each((j, x) => {
@@ -28,6 +30,22 @@
    );
  };
 
+ const addAnchor = (data) => {
+   const length = $(`div[${data}]`).length;
+
+   $(`div[${data}]`)
+     .each((i,e) => {
+       $(e).find('nav-anchor').remove();
+
+       $(e).append(
+         $('<div />', {
+           class: 'nav-anchor btn',
+           html: `Block ${i + 1}`,
+         })
+       );
+     });
+ };
+
  $(document).ready(() => {
    $('#time_condition_timeConditionBlocks')
      .sortable({
@@ -41,6 +59,7 @@
 
 <script type="text/javascript">
  $(document).ready(() => {
+   addAnchor('data-child');
    addDeleteButton('data-child');
 
    $('#time_condition_timeConditionBlocks')
@@ -89,6 +108,7 @@
          maxId++
          addBlock('#time_condition_timeConditionBlocks', maxId, '__name__');
          addDeleteButton('data-child');
+         addAnchor('data-child');
          bindAction(maxId);
 
          $(document).trigger('tnetc::if-block::add');
