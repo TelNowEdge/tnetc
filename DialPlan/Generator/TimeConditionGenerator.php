@@ -218,28 +218,17 @@ class TimeConditionGenerator extends AbstractGenerator
 
     private function processStates(Timecondition $timeCondition, TimeConditionBlock $block, $ext, $context)
     {
-        if (true === $block->getTimeConditionBlockHints()->isEmpty()) {
-            return $this;
-        }
-
         $devState = $this->container
             ->get(AmpConfManager::class)
             ->get('AST_FUNC_DEVICE_STATE')
             ;
 
-        foreach ($block->getTimeConditionBlockHints() as $hint) {
-            switch ($hint->getType()) {
-            case 'green':
-                $state = 'NOT_INUSE';
-                break;
-            case 'red':
-                $state = 'INUSE';
-                break;
-            case 'blink':
-                $state = 'RINGING';
-                break;
-            }
+        $defaultState = $this->container
+            ->get(AmpConfManager::class)
+            ->get('TNE_TC_DEFAULT_HINT')
+            ;
 
+        if (true === $block->getTimeConditionBlockHints()->isEmpty()) {
             $ext->add(
                 $context,
                 $timeCondition->getId(),
@@ -248,7 +237,22 @@ class TimeConditionGenerator extends AbstractGenerator
                     '%s(Custom:TCTNE%d)',
                     $devState,
                     $timeCondition->getId()
-                ), $state)
+                ), $this->convertHint($defaultState))
+            );
+
+            return $this;
+        }
+
+        foreach ($block->getTimeConditionBlockHints() as $hint) {
+            $ext->add(
+                $context,
+                $timeCondition->getId(),
+                false,
+                new \ext_set(sprintf(
+                    '%s(Custom:TCTNE%d)',
+                    $devState,
+                    $timeCondition->getId()
+                ), $this->convertHint($hint->getType()))
             );
         }
 
@@ -265,5 +269,17 @@ class TimeConditionGenerator extends AbstractGenerator
                 $timeCondition->getFallback()->getDestination()
             )
         );
+    }
+
+    private function convertHint($hint)
+    {
+        switch ($hint) {
+        case 'green':
+            return 'NOT_INUSE';
+        case 'red':
+            return 'INUSE';
+        case 'blink':
+            return 'RINGING';
+        }
     }
 }
