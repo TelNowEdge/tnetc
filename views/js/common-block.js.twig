@@ -27,47 +27,110 @@
    ;
  }
 
- const addDeleteButton = (data) => {
+ const addChildButtons = (data, withLink) => {
    $(`div[${data}]`)
      .each((i, e) => {
-       const buttonIsAdded = $(e).find('[data-delete]').length;
-       if (buttonIsAdded !== 0) {
-         return; // e.g. continue
-       }
-       const elem = $(e);
 
-       elem
-         .append(
+       if ($(e).find('[data-child-btn]').length === 0) {
+         $(e).append(
            $('<div />', {
              class: 'element-container',
-             attr: {
-               'data-delete': true
-             }
            }).append(
              $('<div />', {
-               class: 'row'
-             })
-           ).append(
-             $('<a />', {
-               class: 'btn btn-danger'
-             }).append(
-               $('<i />', {
-                 class: 'fa fa-minus-circle'
-               })
-             ).on('click', (e) => {
-               removePrefix(elem.closest('.element-container'));
+               class: 'row',
+               attr: {
+                 'data-child-btn': true,
+               }
              })
            )
-         );
+         )
+       }
+
+       if (withLink === true) {
+         addLinkButton(e, data);
+       }
+
+       addDeleteButton(e, data);
      });
  }
+
+ const addLinkButton = (e, data) => {
+   const buttonIsAdded = $(e).find('[data-link-btn]').length;
+   if (buttonIsAdded !== 0) {
+     return; // e.g. continue
+   }
+
+   $(e)
+     .find('[data-child-btn]')
+     .append(
+       $('<div />', {
+         class: 'col-md-1',
+         attr: {
+           'data-link-btn': true
+         }
+       }).append(
+         $('<a />', {
+           class: 'btn btn-info'
+         }).append(
+           $('<i />', {
+             class: 'fa fa-link'
+           })
+         ).on('click', (x) => {
+           const value = $(e)
+             .find('select[data-link] option:selected')
+             .val();
+
+           const id = JSON.parse(atob(value)).id;
+           const type = JSON.parse(atob(value)).type;
+
+           const url = $(e)
+             .find('[data-link]')
+             .attr('data-link')
+             .replace(/__type__/, type)
+             .replace(/__id__/, id)
+           ;
+
+           window.open(url, '_blank');
+         })
+       )
+     )
+ }
+
+ const addDeleteButton = (e, data) => {
+   const buttonIsAdded = $(e).find('[data-delete]').length;
+   if (buttonIsAdded !== 0) {
+     return; // e.g. continue
+   }
+
+   $(e)
+     .find('[data-child-btn]')
+     .append(
+       $('<div />', {
+         class: 'col-md-1',
+         attr: {
+           'data-delete': true
+         }
+       }).append(
+         $('<a />', {
+           class: 'btn btn-danger'
+         }).append(
+           $('<i />', {
+             class: 'fa fa-minus-circle'
+           })
+         ).on('click', () => {
+           removePrefix($(e).closest('.element-container'));
+         })
+       )
+     );
+ }
+
 
  const removePrefix = (elem) => {
    elem.remove();
  }
 
- const process = (dataName, blockName, prototypeName) => {
-   addDeleteButton(dataName);
+ const process = (dataName, blockName, prototypeName, withLink) => {
+   addChildButtons(dataName, withLink);
 
    $('div[data-child]')
      .each((i, e) => {
@@ -121,9 +184,8 @@
                })
              ).on('click', () => {
                maxId++
-
                addBlock(`#time_condition_timeConditionBlocks_${parentId}_${blockName}`, maxId, prototypeName);
-               addDeleteButton(dataName);
+               addChildButtons(dataName, withLink);
              })
            )
          )

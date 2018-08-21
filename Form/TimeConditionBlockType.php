@@ -31,7 +31,6 @@ class TimeConditionBlockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('weight', HiddenType::class)
             ->add('timeConditionBlockTgs', CollectionType::class, array(
                 'label' => 'Time group',
                 'entry_type' => TimeConditionBlockTgType::class,
@@ -79,7 +78,10 @@ class TimeConditionBlockType extends AbstractType
             ))
             ->add('goto', DestinationType::class, array(
                 'required' => true,
-            ));
+            ))
+            ->add('weight', HiddenType::class)
+            ->add('isActive', HiddenType::class)
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

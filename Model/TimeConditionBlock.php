@@ -75,6 +75,8 @@ class TimeConditionBlock
      */
     protected $timeConditionBlockHints;
 
+    protected $isActive;
+
     public function __construct($child = false)
     {
         $this->weight = 0;
@@ -300,6 +302,48 @@ class TimeConditionBlock
                 $timeConditionBlockHint
             );
 
+        return $this;
+    }
+
+    public function getIsActive()
+    {
+        foreach ($this->getTimeConditionBlockTgs() as $blockTg) {
+            if (null === $blockTg->getTimeGroup()) {
+                continue;
+            }
+
+            foreach ($blockTg->getTimeGroup()->getTimes() as $time) {
+                if (5 > count(explode('|', $time))) {
+                    $time = sprintf('%s|*', $time);
+                }
+
+                if (true === \FreePBX::Timeconditions()->checkTime($time)) {
+                    return true;
+                }
+            }
+        }
+
+        foreach ($this->getTimeConditionBlockCalendars() as $blockCalendar) {
+            if (null === $blockCalendar->getCalendar()) {
+                continue;
+            }
+
+            $match = \FreePBX::Calendar()->matchCalendar($blockCalendar->getCalendar()->getId());
+
+            if (true === $match && 'straight' === $blockCalendar->getPolicy()) {
+                return true;
+            }
+
+            if (false === $match && 'inverse' === $blockCalendar->getPolicy()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function setIsActive($active)
+    {
         return $this;
     }
 }

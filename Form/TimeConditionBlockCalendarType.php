@@ -44,6 +44,17 @@ class TimeConditionBlockCalendarType extends AbstractType
                 'choice_label' => function ($x) {
                     return $x->getName();
                 },
+                'choice_value' => function ($x) {
+                    return base64_encode(json_encode(
+                        array(
+                            'id' => $x->getId(),
+                            'type' => $x->getType(),
+                        )
+                    ));
+                },
+                'attr' => array(
+                    'data-link' => 'config.php?display=calendar&action=view&type=__type__&id=__id__',
+                ),
                 'label' => false,
             ))
             ;

@@ -37,9 +37,11 @@
      .each((i,e) => {
        $(e).find('nav-anchor').remove();
 
+       const active = parseInt($(`#${$(e).attr('id')}_isActive`).val());
+
        $(e).append(
          $('<div />', {
-           class: 'nav-anchor btn',
+           class: `nav-anchor btn ${active === 1 ? 'btn-warning' : ''}`,
            html: `Block ${i + 1}`,
          })
        );
@@ -60,7 +62,7 @@
 <script type="text/javascript">
  $(document).ready(() => {
    addAnchor('data-child');
-   addDeleteButton('data-child');
+   addChildButtons('data-child', false);
 
    $('#time_condition_timeConditionBlocks')
      .find('div[data-child]')
@@ -107,7 +109,7 @@
        ).on('click', (e) => {
          maxId++
          addBlock('#time_condition_timeConditionBlocks', maxId, '__name__');
-         addDeleteButton('data-child');
+         addChildButtons('data-child', false);
          addAnchor('data-child');
          bindAction(maxId);
 

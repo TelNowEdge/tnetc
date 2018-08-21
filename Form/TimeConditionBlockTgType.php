@@ -36,6 +36,14 @@ class TimeConditionBlockTgType extends AbstractType
                 'choice_label' => function ($x) {
                     return $x->getDescription();
                 },
+                'choice_value' => function ($x) {
+                    return base64_encode(json_encode(
+                        array('id' => $x->getId())
+                    ));
+                },
+                'attr' => array(
+                    'data-link' => 'config.php?display=timegroups&view=form&extdisplay=__id__',
+                ),
                 'label' => false,
             ));
     }
