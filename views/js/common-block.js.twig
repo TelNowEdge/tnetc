@@ -89,12 +89,15 @@
 
        let maxId = 0;
 
+       const str = `^${$(e).attr('id')}_${blockName}_(\\d+)$`;
+       const regExp = new RegExp(str);
+
        $(e)
-         .find('div[data-child-hint]')
+         .find(`div[${dataName}]`)
          .each((j, x) => {
-           const id = $(e)
+           const id = $(x)
              .attr('id')
-             .replace(/.*_(\d+)/, "$1")
+             .replace(regExp, "$1")
            ;
 
            maxId = maxId < id ? id : maxId;
@@ -118,6 +121,7 @@
                })
              ).on('click', () => {
                maxId++
+
                addBlock(`#time_condition_timeConditionBlocks_${parentId}_${blockName}`, maxId, prototypeName);
                addDeleteButton(dataName);
              })
