@@ -40,6 +40,7 @@ class TimeConditionGenerator extends AbstractGenerator
                 ->getCollection()
                 ;
         } catch (NoResultException $e) {
+            return;
         }
 
         $context = 'time-condition-tne';
