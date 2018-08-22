@@ -6,6 +6,12 @@
   <category>TelNowEdge</category>
   <publisher>TelNowEdge</publisher>
   <license>Apache-2.0</license>
+  <depends>
+    <module>core</module>
+    <module>tnehook</module>
+    <module>timeconditions</module>
+    <module>calendar</module>
+  </depends>
   <changelog>
 
   </changelog>
