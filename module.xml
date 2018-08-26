@@ -1,9 +1,9 @@
 <module>
   <rawname>tnetc</rawname>
-  <name>Time condition</name>
+  <name>Time conditions</name>
   <version>6.0.0</version>
   <type>setup</type>
-  <category>TelNowEdge</category>
+  <category>Applications</category>
   <publisher>TelNowEdge</publisher>
   <license>Apache-2.0</license>
   <depends>
@@ -19,7 +19,7 @@
 
   </description>
   <menuitems>
-    <tnetc>Time condition</tnetc>
+    <tnetc>Time conditions</tnetc>
   </menuitems>
   <location></location>
   <md5sum></md5sum>
