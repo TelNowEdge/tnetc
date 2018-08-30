@@ -1,6 +1,6 @@
 <module>
   <rawname>tnetc</rawname>
-  <name>Time conditions</name>
+  <name>Time Conditions</name>
   <version>6.0.0</version>
   <type>setup</type>
   <category>Applications</category>
@@ -19,7 +19,7 @@
 
   </description>
   <menuitems>
-    <tnetc>Time conditions</tnetc>
+    <tnetc>Time Conditions</tnetc>
   </menuitems>
   <location></location>
   <md5sum></md5sum>
