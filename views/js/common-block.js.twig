@@ -30,7 +30,6 @@
  const addChildButtons = (data, withLink) => {
    $(`div[${data}]`)
      .each((i, e) => {
-
        if ($(e).find('[data-child-btn]').length === 0) {
          $(e).append(
            $('<div />', {
@@ -169,11 +168,13 @@
        $(e)
          .find(`#${$(e).attr('id')}_${blockName}`)
          .closest('.form-group')
-         .find('div.control-label')
-         .find('div.row')
+         .find('label.control-label')
          .eq(0)
+         .parent()
          .append(
            $('<div />', {
+             class: 'row',
+           }).append($('<div />', {
              class: 'col-md-10',
            }).append(
              $('<a />', {
@@ -187,6 +188,7 @@
                addBlock(`#time_condition_timeConditionBlocks_${parentId}_${blockName}`, maxId, prototypeName);
                addChildButtons(dataName, withLink);
              })
+           )
            )
          )
      });

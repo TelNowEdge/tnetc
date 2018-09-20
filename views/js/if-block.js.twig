@@ -96,25 +96,29 @@
 
    $('#time_condition_timeConditionBlocks')
      .closest('.form-group')
-     .find('div.control-label')
-     .find('i')
+     .find('label.control-label')
      .eq(0)
-     .after(
-       $('<a />', {
-         class: 'btn btn-success tne-add tne-add-if',
+     .parent()
+     .append(
+       $('<div />', {
+         class: 'row',
        }).append(
-         $('<i />', {
-           class: 'fa fa-plus'
-         })
-       ).on('click', (e) => {
-         maxId++
-         addBlock('#time_condition_timeConditionBlocks', maxId, '__name__');
-         addChildButtons('data-child', false);
-         addAnchor('data-child');
-         bindAction(maxId);
+         $('<a />', {
+           class: 'btn btn-success tne-add tne-add-if',
+         }).append(
+           $('<i />', {
+             class: 'fa fa-plus'
+           })
+         ).on('click', (e) => {
+           maxId++
+           addBlock('#time_condition_timeConditionBlocks', maxId, '__name__');
+           addChildButtons('data-child', false);
+           addAnchor('data-child');
+           bindAction(maxId);
 
-         $(document).trigger('tnetc::if-block::add');
-       })
+           $(document).trigger('tnetc::if-block::add');
+         })
+       )
      )
    ;
  });
