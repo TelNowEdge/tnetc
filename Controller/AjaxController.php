@@ -42,10 +42,14 @@ class AjaxController extends AbstractController
 
     public function search($query, &$results)
     {
-        $timeConditions = $this
-            ->get(TimeConditionRepository::class)
-            ->getCollection()
-            ;
+        try {
+            $timeConditions = $this
+                ->get(TimeConditionRepository::class)
+                ->getCollection()
+                ;
+        } catch (NoResultException $e) {
+            return array();
+        }
 
         foreach ($timeConditions as $timeCondition) {
             array_push($results, array(
