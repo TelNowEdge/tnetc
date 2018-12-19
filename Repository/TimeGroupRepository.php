@@ -55,11 +55,12 @@ SELECT
 
         $stmt->execute();
 
-        return $this->mapModel(
-            $this->sqlToArray(
-                $this->fetch($stmt)
-            )
-        );
+        $res = $this->fetchAll($stmt);
+
+        return $this
+            ->collection($res)
+            ->first()
+            ;
     }
 
     private function collection(array $res)
