@@ -83,7 +83,9 @@ SELECT
 
     public function getCollection()
     {
-        $stmt = $this->connection->prepare(self::SQL);
+        $sql = sprintf('%s ORDER BY tc.id, tcb.weight ASC', self::SQL);
+
+        $stmt = $this->connection->prepare($sql);
         $stmt->execute();
 
         $res = $this->fetchAll($stmt);
