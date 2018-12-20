@@ -83,6 +83,10 @@ class TimeConditionController extends AbstractController
             $this->get(TimeConditionDbHandler::class)
                  ->update($timeCondition)
                 ;
+
+            redirect(
+                sprintf('config.php?display=tnetc&id=%d', $timeCondition->getId())
+            );
         }
 
         $usedBy = framework_check_destination_usage(sprintf('time-condition-tne,%d,1', $timeCondition->getId()));
