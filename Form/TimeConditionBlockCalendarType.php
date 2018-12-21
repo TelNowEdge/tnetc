@@ -39,8 +39,7 @@ class TimeConditionBlockCalendarType extends AbstractType
             ))
             ->add('calendar', RepositoryType::class, array(
                 'repository' => CalendarHelper::class,
-                'caller' => 'getByType',
-                'parameters' => array('local'),
+                'caller' => 'getCollection',
                 'choice_label' => function ($x) {
                     return $x->getName();
                 },

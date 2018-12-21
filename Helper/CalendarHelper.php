@@ -44,15 +44,6 @@ class CalendarHelper
         return $collection;
     }
 
-    public function getByType()
-    {
-        return $this
-            ->getCollection()
-            ->filter(function ($x) {
-                return 'local' === $x->getType();
-            });
-    }
-
     public function getById($id)
     {
         return $this
