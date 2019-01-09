@@ -41,7 +41,7 @@ class TimeConditionBlockCalendarType extends AbstractType
                 'repository' => CalendarHelper::class,
                 'caller' => 'getCollection',
                 'choice_label' => function ($x) {
-                    return $x->getName();
+                    return sprintf('[%s] %s', $x->getType(), $x->getName());
                 },
                 'choice_value' => function ($x) {
                     return base64_encode(json_encode(
