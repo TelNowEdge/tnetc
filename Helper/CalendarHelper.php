@@ -35,7 +35,7 @@ class CalendarHelper
                 ->setName($x['name'])
                 ->setDescription($x['description'])
                 ->setType($x['type'])
-                ->setTimezone($x['timezone'])
+                ->setTimezone(true === isset($x['timezone']) ? $x['timezone'] : null)
                 ;
 
             $collection->add($calendar);
