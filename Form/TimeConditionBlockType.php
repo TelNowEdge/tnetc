@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright [2018] [TelNowEdge]
+ * Copyright 2018 TelNowEdge
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,9 @@ class TimeConditionBlockType extends AbstractType
         $builder
             ->add('timeConditionBlockTgs', CollectionType::class, array(
                 'label' => 'Time group',
+                'label_attr' => array(
+                    'fpbx_help' => 'Click on + to add new time group.',
+                ),
                 'entry_type' => TimeConditionBlockTgType::class,
                 'entry_options' => array(
                     'label' => false,
@@ -48,6 +51,9 @@ class TimeConditionBlockType extends AbstractType
             ))
             ->add('timeConditionBlockCalendars', CollectionType::class, array(
                 'label' => 'Calendar',
+                'label_attr' => array(
+                    'fpbx_help' => 'Click on + to add new calendar.',
+                ),
                 'entry_type' => TimeConditionBlockCalendarType::class,
                 'entry_options' => array(
                     'label' => false,
@@ -63,6 +69,9 @@ class TimeConditionBlockType extends AbstractType
             ))
             ->add('timeConditionBlockHints', CollectionType::class, array(
                 'label' => 'BLF',
+                'label_attr' => array(
+                    'fpbx_help' => 'Click on + to add hint to supervise this block with BLF.',
+                ),
                 'entry_type' => TimeConditionBlockHintType::class,
                 'entry_options' => array(
                     'label' => false,
