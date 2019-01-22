@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright [2018] [TelNowEdge]
+ * Copyright 2018 TelNowEdge
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,17 @@ class TimeConditionType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('internalDial')
+            ->add('internalDial',null, array(
+                'label' => 'Internal Extension',
+                'label_attr' => array(
+                    'fpbx_help' => 'Internal extension to dial this time condition.',
+                ),
+            ))
             ->add('dayNight', RepositoryType::class, array(
+                'label' => 'Call Flow Override',
+                'label_attr' => array(
+                    'fpbx_help' => 'If this call flow is in override mode, this timecondition use the callflow destination.',
+                ),
                 'repository' => DayNightRepository::class,
                 'caller' => 'getCollection',
                 'choice_label' => function ($x) {
@@ -46,13 +55,18 @@ class TimeConditionType extends AbstractType
                 },
                 'placeholder' => '-',
                 'required' => false,
-                'label' => 'Call flow control',
             ))
             ->add('timezone', TimezoneType::class, array(
+                'label_attr' => array(
+                    'fpbx_help' => 'Time zone for this time condition.',
+                ),
                 'preferred_choices' => array('Europe/Paris'),
             ))
             ->add('timeConditionBlocks', CollectionType::class, array(
                 'label' => 'If blocks',
+                'label_attr' => array(
+                    'fpbx_help' => 'Click on + to add new if block.',
+                ),
                 'entry_type' => TimeConditionBlockType::class,
                 'entry_options' => array(
                     'label' => false,
