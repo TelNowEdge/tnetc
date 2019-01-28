@@ -6,25 +6,7 @@
      .replace(regExp, maxId)
    ;
 
-   $(elem)
-     .append(
-       $('<div />', {
-         class: 'element-container'
-       }).append(
-         $('<div />', {
-           class: 'row'
-         }).append(
-           $('<div />', {
-             class: 'col-md-12'
-           }).append(
-             $('<div />', {
-               class: 'row'
-             }).append(prototype)
-           )
-         )
-       )
-     )
-   ;
+   $(elem).append(prototype);
  }
 
  const addChildButtons = (data, withLink) => {
