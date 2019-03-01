@@ -19,7 +19,6 @@
 namespace TelNowEdge\Module\tnetc\Controller;
 
 use TelNowEdge\FreePBX\Base\Controller\AbstractController;
-use TelNowEdge\FreePBX\Base\Exception\NoResultException;
 
 class PageController extends AbstractController
 {

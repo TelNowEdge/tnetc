@@ -34,7 +34,7 @@ class TimeConditionType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('internalDial',null, array(
+            ->add('internalDial', null, array(
                 'label' => 'Internal Extension',
                 'label_attr' => array(
                     'fpbx_help' => 'Internal extension to dial this time condition.',

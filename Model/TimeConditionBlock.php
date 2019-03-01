@@ -313,7 +313,7 @@ class TimeConditionBlock
             }
 
             foreach ($blockTg->getTimeGroup()->getTimes() as $time) {
-                if (5 > count(explode('|', $time))) {
+                if (5 > \count(explode('|', $time))) {
                     $time = sprintf('%s|*', $time);
                 }
 

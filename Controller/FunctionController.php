@@ -67,7 +67,7 @@ class FunctionController extends AbstractController
 
     public function checkDestinations($dest = true)
     {
-        if ((true === is_array($dest) && true === empty($dest))) {
+        if ((true === \is_array($dest) && true === empty($dest))) {
             return array();
         }
 
