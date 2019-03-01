@@ -71,6 +71,10 @@ class TimeGroup
 
     public function addTime($time)
     {
+        if (null === $time) {
+            return $this;
+        }
+
         $this->times->add($time);
 
         return $this;

@@ -30,7 +30,7 @@ SELECT
         ,tg.description tg__description
         ,tgd.time map_local__time
     FROM
-        timegroups_groups tg INNER JOIN timegroups_details tgd
+        timegroups_groups tg LEFT JOIN timegroups_details tgd
             ON (
             tgd.timegroupid = tg.id
         )
