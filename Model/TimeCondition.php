@@ -175,7 +175,7 @@ class TimeCondition
     public function addTimeConditionBlock(TimeConditionBlock $timeConditionBlock)
     {
         if (null !== ($object = $this->timeConditionBlocks->get($timeConditionBlock->getId()))
-            && null !== $timeConditionBlock->getId()
+        && null !== $timeConditionBlock->getId()
         ) {
             false === $timeConditionBlock->getTimeConditionBlockTgs()->isEmpty()
                 ? $object->addTimeConditionBlockTg($timeConditionBlock->getTimeConditionBlockTgs()->first())
