@@ -1,6 +1,6 @@
 <module>
   <rawname>tnetc</rawname>
-  <name>Time Conditions</name>
+  <name>FBBX Time Conditions modified by TelNowEdge</name>
   <version>6.1.0</version>
   <type>setup</type>
   <category>Applications</category>
@@ -13,7 +13,8 @@
     <module>calendar</module>
   </depends>
  <changelog>
-    *6.1.0:  New migration et passage Version 6.1.x de TNE
+   *6.1.0:  New migration et passage Version 6.1.x de TNE
+   *6.0.0: Il faut garder la version FreePBX c'est das addons
   </changelog>
   <description>
 
