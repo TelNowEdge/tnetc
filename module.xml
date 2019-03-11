@@ -1,7 +1,7 @@
 <module>
   <rawname>tnetc</rawname>
   <name>Time Conditions</name>
-  <version>6.0.0</version>
+  <version>6.1.0</version>
   <type>setup</type>
   <category>Applications</category>
   <publisher>TelNowEdge</publisher>
@@ -12,8 +12,8 @@
     <module>timeconditions</module>
     <module>calendar</module>
   </depends>
-  <changelog>
-
+ <changelog>
+    *6.1.0:  New migration et passage Version 6.1.x de TNE
   </changelog>
   <description>
 
