@@ -19,6 +19,7 @@
 namespace FreePBX\modules;
 
 use TelNowEdge\FreePBX\Base\Module\Module;
+use TelNowEdge\FreePBX\Base\Resources\Migrations\MigrationBuilder;
 use TelNowEdge\Module\tnetc\Controller\AjaxController;
 use TelNowEdge\Module\tnetc\Controller\DialplanController;
 use TelNowEdge\Module\tnetc\Controller\FunctionController;
@@ -39,13 +40,24 @@ class Tnetc extends Module implements \BMO
 
     public function install()
     {
-        return array_reduce(self::getMigrations(), function ($aggregation, $x) {
-            return $aggregation && $this->get($x)->migrate();
-        }, true);
+        $builder = MigrationBuilder::createBuilder();
+
+        foreach (self::getMigrations() as $x) {
+            $builder->addMigration($this->get($x));
+        }
+
+        return $builder->install();
     }
 
     public function uninstall()
     {
+        $builder = MigrationBuilder::createBuilder();
+
+        foreach (self::getMigrations() as $x) {
+            $builder->addMigration($this->get($x));
+        }
+
+        return $builder->uninstall();
     }
 
     public function backup()
