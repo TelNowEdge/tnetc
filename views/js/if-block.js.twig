@@ -16,6 +16,14 @@
        $(x).attr('name', $(x).attr('name').replace(/\[\d+\]/, `[${i}]`));
      });
 
+   $(e)
+     .find('[data-prototype]')
+     .each((j, x) => {
+       console.log(i);
+       $(x).attr('data-prototype', $(x).attr('data-prototype').replace(/_\d+_/g, `_${i}_`));
+       $(x).attr('data-prototype', $(x).attr('data-prototype').replace(/\[\d+\]/g, `[${i}]`));
+     });
+
    bindAction(i);
  }
 
@@ -86,10 +94,11 @@
    let maxId = 0;
    $('div[data-child]')
      .each((i, e) => {
-       const id = $(e)
-         .attr('id')
-         .replace(/.*_(\d+)/, "$1")
-       ;
+       const id = parseInt(
+         $(e)
+           .attr('id')
+           .replace(/.*_(\d+)/, "$1")
+       );
 
        maxId = maxId < id ? id : maxId;
      });
