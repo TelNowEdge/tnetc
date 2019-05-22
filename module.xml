@@ -8,13 +8,11 @@
   <license>Apache-2.0</license>
   <depends>
     <module>core</module>
-    <module>tnehook</module>
     <module>timeconditions</module>
     <module>calendar</module>
   </depends>
- <changelog>
-   *6.1.0:  New migration et passage Version 6.1.x de TNE
-   *6.0.0: Il faut garder la version FreePBX c'est das addons
+  <changelog>
+    *6.1.0:  New migration. New stable version.
   </changelog>
   <description>
 
