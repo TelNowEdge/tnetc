@@ -25,7 +25,7 @@ $restrict_mods = array('tnetc' => true);
 $bootstrap_settings['freepbx_auth'] = false;
 include '/etc/freepbx.conf';
 
-$container = FreePBX::tnehook()->getContainer();
+$container = FreePBX::tnetc()->getContainer();
 
 $timeConditions = $container
     ->get(TimeConditionRepository::class)

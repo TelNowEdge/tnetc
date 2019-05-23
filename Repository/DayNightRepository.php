@@ -21,7 +21,6 @@ namespace TelNowEdge\Module\tnetc\Repository;
 use Doctrine\Common\Collections\ArrayCollection;
 use TelNowEdge\FreePBX\Base\Form\Model\Destination;
 use TelNowEdge\FreePBX\Base\Repository\AbstractRepository;
-use TelNowEdge\Module\musictne\Model\Recording;
 use TelNowEdge\Module\tnetc\Model\DayNight;
 
 class DayNightRepository extends AbstractRepository
@@ -101,26 +100,18 @@ SELECT
         /* Beautiful code was never writing */
         $res['dest_n']['destination'] = $res['d']['night'];
         $res['dest_d']['destination'] = $res['d']['day'];
-        $res['r_n']['id'] = $res['d']['nightRecordingId'];
-        $res['r_d']['id'] = $res['d']['dayRecordingId'];
         unset(
             $res['d']['night'],
-            $res['d']['day'],
-            $res['d']['nightRecordingId'],
-            $res['d']['dayRecordingId']
+            $res['d']['day']
         );
 
         $d = $this->objectFromArray(DayNight::class, $res['d']);
         $night = $this->objectFromArray(Destination::class, $res['dest_n']);
         $day = $this->objectFromArray(Destination::class, $res['dest_d']);
-        $nightRecording = $this->objectFromArray(Recording::class, $res['r_n']);
-        $dayRecording = $this->objectFromArray(Recording::class, $res['r_d']);
 
         $d
             ->setNight($night)
             ->setDay($day)
-            ->setNightRecording($nightRecording)
-            ->setDayRecording($dayRecording)
             ;
 
         return $d;

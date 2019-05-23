@@ -19,7 +19,6 @@
 namespace TelNowEdge\Module\tnetc\Model;
 
 use TelNowEdge\FreePBX\Base\Form\Model\Destination;
-use TelNowEdge\Module\musictne\Model\Recording;
 
 class DayNight
 {
@@ -33,16 +32,17 @@ class DayNight
 
     protected $password;
 
-    protected $nightRecording;
+    /**
+     * To keep tnetc standalone doesn't perform the join with musictne/Recording.
+     */
+    protected $nightRecordingId;
 
-    protected $dayRecording;
+    protected $dayRecordingId;
 
     public function __construct()
     {
         $this->day = new Destination();
         $this->night = new Destination();
-        $this->nightRecording = new Recording();
-        $this->dayRecording = new Recording();
     }
 
     public function getExt()
@@ -105,26 +105,26 @@ class DayNight
         return $this;
     }
 
-    public function getNightRecording()
+    public function getNightRecordingId()
     {
-        return $this->nightRecording;
+        return $this->nightRecordingId;
     }
 
-    public function setNightRecording(Recording $nightRecording)
+    public function setNightRecordingId($nightRecordingId)
     {
-        $this->nightRecording = $nightRecording;
+        $this->nightRecordingId = $nightRecordingId;
 
         return $this;
     }
 
-    public function getDayRecording()
+    public function getDayRecordingId()
     {
-        return $this->dayRecording;
+        return $this->dayRecordingId;
     }
 
-    public function setDayRecording(Recording $dayRecording)
+    public function setDayRecordingId($dayRecordingId)
     {
-        $this->dayRecording = $dayRecording;
+        $this->dayRecordingId = $dayRecordingId;
 
         return $this;
     }
