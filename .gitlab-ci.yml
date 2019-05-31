@@ -1,0 +1,11 @@
+stages:
+  - sign
+
+sign:
+  stage: sign
+  script:
+    - apt-get update && apt-get install -y git php-cli gpg
+    - git clone -b master https://gitlab-ci-token:${CI_JOB_TOKEN}@gitplus.telnowedge.com/cicd/signfreepbxmodule.git /tmp/signFreePBXModule
+    - cd /tmp/signFreePBXModule && bash signFreePBXModule.sh
+  only:
+    - fpbx14
