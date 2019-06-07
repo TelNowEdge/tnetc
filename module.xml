@@ -1,7 +1,7 @@
 <module>
   <rawname>tnetc</rawname>
   <name>Time Conditions TNE</name>
-  <version>6.1.0</version>
+  <version>6.2.0</version>
   <type>setup</type>
   <category>Applications</category>
   <publisher>TelNowEdge</publisher>
@@ -12,6 +12,9 @@
     <module>calendar</module>
   </depends>
   <changelog>
+    *6.2.0: Domain are now supported.
+    *6.2.0: Domain are now supported.
+    *6.2.0: Domain are now supported.
     *6.1.0:  New migration. New stable version.
   </changelog>
   <description>
