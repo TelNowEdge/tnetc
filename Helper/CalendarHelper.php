@@ -19,6 +19,7 @@
 namespace TelNowEdge\Module\tnetc\Helper;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use TelNowEdge\FreePBX\Base\Exception\NoResultException;
 use TelNowEdge\Module\tnetc\Model\Calendar;
 
 class CalendarHelper
@@ -46,12 +47,18 @@ class CalendarHelper
 
     public function getById($id)
     {
-        return $this
+        $calendar = $this
             ->getCollection()
             ->filter(function ($x) use ($id) {
                 return $id === $x->getId();
             })
             ->first()
             ;
+
+        if (false === $calendar) {
+            throw new NoResultException();
+        }
+
+        return $calendar;
     }
 }

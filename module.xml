@@ -25,4 +25,9 @@
   </menuitems>
   <location></location>
   <md5sum></md5sum>
+  <hooks>
+    <core namespace="FreePBX\modules" class="Timeconditions">
+      <method namespace="FreePBX\modules" class="Tnetc" callingMethod="delTimeGroup">delTimeGroup</method>
+    </core>
+  </hooks>
 </module>

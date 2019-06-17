@@ -23,11 +23,13 @@ use TelNowEdge\FreePBX\Base\Exception\NoResultException;
 use TelNowEdge\FreePBX\Base\Form\Model\Destination;
 use TelNowEdge\FreePBX\Base\Repository\AbstractRepository;
 use TelNowEdge\Module\tnetc\Helper\CalendarHelper;
+use TelNowEdge\Module\tnetc\Model\Calendar;
 use TelNowEdge\Module\tnetc\Model\TimeCondition;
 use TelNowEdge\Module\tnetc\Model\TimeConditionBlock;
 use TelNowEdge\Module\tnetc\Model\TimeConditionBlockCalendar;
 use TelNowEdge\Module\tnetc\Model\TimeConditionBlockHint;
 use TelNowEdge\Module\tnetc\Model\TimeConditionBlockTg;
+use TelNowEdge\Module\tnetc\Model\TimeGroup;
 
 class TimeConditionRepository extends AbstractRepository
 {
@@ -226,9 +228,14 @@ SELECT
                     continue;
                 }
 
-                $res = $this->timeGroupRepository
-                    ->getById($x->getTimeGroup())
-                    ;
+                try {
+                    $res = $this->timeGroupRepository
+                        ->getById($x->getTimeGroup())
+                        ;
+                } catch (NoResultException $e) {
+                    $res = new TimeGroup();
+                    $res->setId($x->getTimeGroup());
+                }
 
                 $x->setTimeGroup($res);
             }
@@ -238,9 +245,14 @@ SELECT
                     continue;
                 }
 
-                $res = $this->calendarHelper
-                    ->getById($x->getCalendar())
-                    ;
+                try {
+                    $res = $this->calendarHelper
+                        ->getById($x->getCalendar())
+                        ;
+                } catch (NoResultException $e) {
+                    $res = new Calendar();
+                    $res->setId($x->getCalendar());
+                }
 
                 $x->setCalendar($res);
             }

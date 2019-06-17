@@ -68,6 +68,26 @@ INSERT
         return true;
     }
 
+    public function triggerUpdate(TimeConditionBlock $timeConditionBlock)
+    {
+        $this->eventDispatcher->dispatch(
+            TimeConditionBlockEvent::UPDATE_PRE_BIND,
+            new TimeConditionBlockEvent($timeConditionBlock)
+        );
+
+        $this->eventDispatcher->dispatch(
+            TimeConditionBlockEvent::UPDATE_PRE_SAVE,
+            new TimeConditionBlockEvent($timeConditionBlock)
+        );
+
+        $this->eventDispatcher->dispatch(
+            TimeConditionBlockEvent::UPDATE_POST_SAVE,
+            new TimeConditionBlockEvent($timeConditionBlock)
+        );
+
+        return true;
+    }
+
     public function update(TimeConditionBlock $timeConditionBlock)
     {
         $sql = '

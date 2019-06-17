@@ -18,8 +18,11 @@
 
 namespace TelNowEdge\Module\tnetc\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use TelNowEdge\FreePBX\Base\Controller\AbstractController;
+use TelNowEdge\FreePBX\Base\Exception\NoResultException;
 use TelNowEdge\Module\tnetc\Form\TimeConditionType;
+use TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionBlockDbHandler;
 use TelNowEdge\Module\tnetc\Handler\DbHandler\TimeConditionDbHandler;
 use TelNowEdge\Module\tnetc\Model\TimeCondition;
 use TelNowEdge\Module\tnetc\Repository\TimeConditionRepository;
@@ -164,6 +167,118 @@ class TimeConditionController extends AbstractController
         needreload();
 
         redirect('config.php?display=tnetc');
+    }
+
+    /**
+     * Called  by Tnetc::class.
+     */
+    public function deleteTimeGroup($id)
+    {
+        try {
+            $collection = $this
+                ->get(TimeConditionRepository::class)
+                ->getCollection()
+                ;
+        } catch (NoResultException $e) {
+            return $this;
+        }
+
+        $changed = new ArrayCollection();
+
+        $collection->forAll(function ($null, $timeCondition) use ($changed, $id) {
+            $timeCondition->getTimeConditionBlocks()->forAll(function ($null, $block) use ($changed, $id) {
+                $block->getTimeConditionBlockTgs()->forAll(function ($null, $x) use ($block, $changed, $id) {
+                    if ($x->getTimeGroup()->getId() !== $id) {
+                        return true;
+                    }
+
+                    $block->removeTimeConditionBlockTg($x);
+
+                    if (null === $changed->get($block->getId())) {
+                        $changed->set($block->getId(), $block);
+                    }
+
+                    return true;
+                });
+
+                return true;
+            });
+
+            return true;
+        });
+
+        $changed->forAll(function ($k, $x) {
+            $this
+                ->get(TimeConditionBlockDbHandler::class)
+                ->triggerUpdate($x)
+                ;
+
+            return true;
+        });
+    }
+
+    /**
+     * Called  by Tnetc::doConfigPageInit.
+     */
+    public function deleteCalendar()
+    {
+        $request = $this->get('request');
+
+        $action = null !== $request->request->get('action')
+            ? $request->request->get('action')
+            : $request->query->get('action')
+            ;
+
+        $id = null !== $request->request->get('id')
+            ? $request->request->get('id')
+            : $request->query->get('id')
+            ;
+
+        if ('delete' !== $action) {
+            return;
+        }
+
+        try {
+            $collection = $this
+                ->get(TimeConditionRepository::class)
+                ->getCollection()
+                ;
+        } catch (NoResultException $e) {
+            return;
+        }
+
+        $changed = new ArrayCollection();
+
+        $collection->forAll(function ($null, $timeCondition) use ($changed, $id) {
+            $timeCondition->getTimeConditionBlocks()->forAll(function ($null, $block) use ($changed, $id) {
+                $block->getTimeConditionBlockCalendars()->forAll(function ($null, $x) use ($block, $changed, $id) {
+                    if ($x->getCalendar()->getId() !== $id) {
+                        return true;
+                    }
+
+                    $block->removeTimeConditionBlockCalendar($x);
+
+                    if (null === $changed->get($block->getId())) {
+                        $changed->set($block->getId(), $block);
+                    }
+
+                    return true;
+                });
+
+                return true;
+            });
+
+            return true;
+        });
+
+        $changed->forAll(function ($k, $x) {
+            $this
+                ->get(TimeConditionBlockDbHandler::class)
+                ->triggerUpdate($x)
+                ;
+
+            return true;
+        });
     }
 
     public static function getViewsDir()

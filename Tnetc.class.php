@@ -68,8 +68,21 @@ class Tnetc extends Module implements \BMO
     {
     }
 
+    public static function myConfigPageInits()
+    {
+        return array(
+            'calendar',
+        );
+    }
+
     public function doConfigPageInit($page)
     {
+        if ('calendar' === $page) {
+            $this
+                ->get(TimeConditionController::class)
+                ->deleteCalendar()
+                ;
+        }
     }
 
     public function search($query, &$results)
@@ -212,6 +225,14 @@ class Tnetc extends Module implements \BMO
             ->get(PageController::class)
             ->showAction()
             ;
+    }
+
+    /**
+     * Called by hooks (module.xml).
+     */
+    public function delTimeGroup($id)
+    {
+        return $this->get(TimeConditionController::class)->deleteTimeGroup($id);
     }
 
     /**
