@@ -30,3 +30,8 @@ function tnetc_destinations()
 {
     return FreePBX::Tnetc()->getDestinations();
 }
+
+function tnetc_timegroups_usage($id)
+{
+    return FreePBX::Tnetc()->getTimeGroupUsage($id);
+}

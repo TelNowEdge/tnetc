@@ -18,6 +18,7 @@
 
 namespace TelNowEdge\Module\tnetc\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use TelNowEdge\FreePBX\Base\Controller\AbstractController;
 use TelNowEdge\FreePBX\Base\Exception\NoResultException;
 use TelNowEdge\Module\tnetc\Manager\DestinationManager;
@@ -76,6 +77,45 @@ class FunctionController extends AbstractController
         }
 
         return $this->get(DestinationManager::class)->getByDestination($dest);
+    }
+
+    public function getTimeGroupUsage($id)
+    {
+        $collection = $this
+            ->get(TimeConditionRepository::class)
+            ->getCollection()
+            ;
+
+        $temp = new ArrayCollection();
+
+        $collection->forAll(function ($null, $timeCondition) use ($id, $temp) {
+            $timeCondition->getTimeConditionBlocks()->forAll(function ($null, $block) use ($id, $temp) {
+                $block->getTimeConditionBlockTgs()->forAll(function ($null, $x) use ($id, $temp) {
+                    if ($id !== $x->getTimeGroup()->getId()) {
+                        return true;
+                    }
+
+                    $temp->add($x);
+
+                    return true;
+                });
+
+                return true;
+            });
+
+            return true;
+        });
+
+        return $temp->map(function ($x) {
+            return array(
+                'url_query' => sprintf('config.php?display=tnetc&id=%d', $x->getTimeConditionBlock()->getTimeCondition()->getId()),
+                'description' => sprintf(
+                    '[TimeCondition][Block#%d] %s',
+                    $x->getTimeConditionBlock()->getWeight() + 1,
+                    $x->getTimeConditionBlock()->getTimeCondition()->getName()
+                ),
+            );
+        })->toArray();
     }
 
     public static function getViewsDir()

@@ -238,6 +238,11 @@ class Tnetc extends Module implements \BMO
     /**
      * This function are called by FreePBX hook ; Please watch function.inc.php.
      */
+    public function getTimeGroupUsage($id)
+    {
+        return $this->get(FunctionController::class)->getTimeGroupUsage($id);
+    }
+
     public function getDestinations()
     {
         return $this->get(FunctionController::class)->getDestinations();
